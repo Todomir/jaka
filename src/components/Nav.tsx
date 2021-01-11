@@ -4,7 +4,7 @@ const Nav: React.FC = () => {
   return (
     <nav>
       <section className="px-10 py-5 flex justify-between items-center dark:bg-gray-900">
-        <p className="font-black text-lg tracking-tighter dark:text-white">
+        <p className="font-black font-cursive text-xl tracking-tighter dark:text-white">
           JAKA
         </p>
 
