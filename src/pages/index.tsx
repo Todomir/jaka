@@ -3,6 +3,8 @@ import Head from 'next/head'
 import useGQLQuery from '@hooks/useGQLQuery'
 import useToggle from '@hooks/useToggle'
 
+import Nav from '@components/Nav'
+
 import { GET_USERS } from '@utils/queries'
 
 const UserSkeleton: React.FC = () => {
@@ -31,6 +33,8 @@ const Home: React.FC = () => {
       <Head>
         <title>Create Next App - Boilerplate</title>
       </Head>
+
+      <Nav />
 
       <main className="w-screen h-screen flex flex-col justify-center items-center bg-white transition-colors dark:bg-gray-900">
         <button
