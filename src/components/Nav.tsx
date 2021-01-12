@@ -8,7 +8,7 @@ const Nav: React.FC = () => {
   const { darkMode, toggleDarkMode } = useContext(DarkModeContext)
   return (
     <nav>
-      <section className="px-10 py-5 flex justify-between items-center dark:bg-gray-900">
+      <section className="px-10 py-5 fixed w-full bg-white flex justify-between items-center dark:bg-gray-900 z-50">
         <div className="flex justify-center items-center space-x-5">
           <p className="h-6 font-black font-cursive text-xl tracking-tighter dark:text-white">
             JAKA

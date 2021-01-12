@@ -19,13 +19,13 @@ const Home: React.FC = () => {
 
         <Nav />
       </header>
-      <main className="flex flex-col justify-center px-10 h-full w-screen dark:bg-gray-900">
-        <section className="grid grid-cols-1 grid-rows-hero sm:grid-cols-hero mx-auto">
+      <main className="flex flex-col justify-center px-2 h-full w-screen dark:bg-gray-900">
+        <section className="grid grid-cols-1 grid-rows-hero sm:grid-cols-hero mx-auto mt-24">
           <div
             id="hero"
             className="sm:col-start-1 sm:col-end-3 sm:row-start-1 sm:mx-auto -mt-24 sm:mt-0 sm:self-end grid grid-cols-1 grid-rows-hero-elements sm:grid-cols-1 z-10"
           >
-            <h1 className="flex items-center justify-center text-9xl sm:text-8xl md:text-9xl lg:text-10xl font-cursive tracking-tightest bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-500">
+            <h1 className="flex items-center justify-center text-8xl sm:text-9xl lg:text-10xl font-cursive tracking-tightest bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-500">
               JAKA
             </h1>
             <div className="mx-auto sm:mx-0">
@@ -48,13 +48,24 @@ const Home: React.FC = () => {
             </div>
           </div>
           <div className="sm:col-start-2 sm:col-end-4 row-start-1 z-0">
-            <Image
-              src="/076.png"
-              alt="Man checking a checkbox"
-              layout="intrinsic"
-              width={385}
-              height={473}
-            />
+            <div className="hidden sm:block">
+              <Image
+                src="/076.png"
+                alt="Man checking a checkbox"
+                layout="intrinsic"
+                width={345}
+                height={433}
+              />
+            </div>
+            <div className="block mt-7 sm:hidden">
+              <Image
+                src="/076.png"
+                alt="Man checking a checkbox"
+                layout="intrinsic"
+                width={210}
+                height={255}
+              />
+            </div>
           </div>
         </section>
         <article className="w-48 md:w-96 text-center text-xs md:text-base mt-16 mb-10 tracking-tighter mx-auto text-gray-400 dark:text-gray-700">

@@ -9,12 +9,7 @@ module.exports = {
   theme: {
     extend: {
       fontSize: {
-        '10xl': [
-          '200px',
-          {
-            letterSpacing: '-0.02em'
-          }
-        ]
+        '10xl': '200px'
       },
       gridTemplateColumns: {
         hero: '2fr 1fr 1fr',
