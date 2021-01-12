@@ -14,7 +14,7 @@ const Home: React.FC = () => {
     <div className={`subpixel-antialiased h-screen ${darkMode ? 'dark' : ''}`}>
       <header>
         <Head>
-          <title>Create Next App - Boilerplate</title>
+          <title>JAKA | Welcome</title>
         </Head>
 
         <Nav />
