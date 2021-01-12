@@ -19,7 +19,7 @@ interface Props {
 export const DarkModeContext = createContext<IDarkMode | null>(null)
 
 export default function DarkModeProvider({ children }: Props): ReactElement {
-  const [darkMode, toggleDarkMode] = useToggle(true)
+  const [darkMode, toggleDarkMode] = useToggle()
 
   return (
     <DarkModeContext.Provider value={{ darkMode, toggleDarkMode }}>
