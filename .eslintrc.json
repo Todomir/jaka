@@ -54,6 +54,7 @@
                     "/^@components/",
                     "/^@icons/",
                     "/^@pages/",
+                    "/^@store/",
                     "/^@services/",
                     "/^@styles/",
                     "/^@utils/",

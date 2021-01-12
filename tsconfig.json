@@ -11,18 +11,21 @@
       "@pages/*": [
         "pages/*"
       ],
+      "@store/*": [
+        "store/*"
+      ],
       "@services/*": [
         "services/*"
       ],
       "@styles/*": [
         "styles/*"
       ],
+      "@hooks/*": [
+        "utils/hooks/*"
+      ],
       "@utils/*": [
         "utils/*"
       ],
-      "@hooks/*": [
-        "utils/hooks/*"
-      ]
     },
     "target": "es5",
     "lib": [
