@@ -7,7 +7,27 @@ module.exports = {
   ],
   darkMode: 'class', // or 'media' or false
   theme: {
-    extend: {},
+    extend: {
+      fontSize: {
+        '10xl': [
+          '200px',
+          {
+            letterSpacing: '-0.02em'
+          }
+        ]
+      },
+      gridTemplateColumns: {
+        hero: '2fr 1fr 1fr',
+        'hero-elements': '1fr auto auto'
+      },
+      gridTemplateRows: {
+        hero: '1fr auto',
+        'hero-elements': '1fr auto auto'
+      },
+      letterSpacing: {
+        tightest: '-.15em'
+      }
+    },
     fontFamily: {
       cursive: ['Fugaz One', 'cursive'],
       sans: ['Inter', 'sans-serif'],

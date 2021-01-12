@@ -4,6 +4,9 @@ interface ButtonProps {
   small?: boolean
   outlined?: boolean
   className?: string
+  onClick?:
+    | ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void)
+    | undefined
 }
 
 const Button: React.FC<ButtonProps> = ({

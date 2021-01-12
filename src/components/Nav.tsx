@@ -1,12 +1,20 @@
-import Button from './Button'
+import { useContext } from 'react'
 
+import { DarkModeContext } from '@store/DarkModeContext'
+
+import Button from './Button'
+import Switch from './Switch'
 const Nav: React.FC = () => {
+  const { darkMode, toggleDarkMode } = useContext(DarkModeContext)
   return (
     <nav>
       <section className="px-10 py-5 flex justify-between items-center dark:bg-gray-900">
-        <p className="font-black font-cursive text-xl tracking-tighter dark:text-white">
-          JAKA
-        </p>
+        <div className="flex justify-center items-center space-x-5">
+          <p className="h-6 font-black font-cursive text-xl tracking-tighter dark:text-white">
+            JAKA
+          </p>
+          <Switch value={darkMode} toggle={toggleDarkMode} darkMode />
+        </div>
 
         <div className="flex space-x-10">
           <Button label="Login" color="primary" small />
