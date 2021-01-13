@@ -1,26 +1,25 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 
-import { ReactElement, useContext } from 'react'
+import { ReactElement } from 'react'
 
 import Button from '@components/Button'
 import Nav from '@components/Nav'
 
-import { DarkModeContext } from '@store/DarkModeContext'
-
 export default function Home(): ReactElement {
-  const { darkMode } = useContext(DarkModeContext)
   return (
-    <div className={`w-screen h-screen ${darkMode ? 'dark' : ''}`}>
+    <div className="w-screen h-screen">
       <header>
         <Head>
           <title>JAKA | Welcome</title>
         </Head>
-
-        <Nav />
       </header>
-      <main className="flex flex-col justify-center px-2 h-full w-screen dark:bg-gray-900">
-        <section className="grid grid-cols-1 grid-rows-hero sm:grid-cols-hero mx-auto mt-24">
+
+      <Nav />
+
+      <main className="flex flex-col justify-center px-2 h-screen w-screen dark:bg-gray-900">
+        <section className="grid grid-cols-1 grid-rows-hero sm:grid-cols-hero mx-auto mt-10 sm:20">
           <div
             id="hero"
             className="sm:col-start-1 sm:col-end-3 sm:row-start-1 sm:mx-auto -mt-24 sm:mt-0 sm:self-end grid grid-cols-1 grid-rows-hero-elements sm:grid-cols-1 z-10"
@@ -34,17 +33,21 @@ export default function Home(): ReactElement {
               </h2>
             </div>
             <div className="grid sm:grid-cols-2 gap-4 px-16 sm:px-0 mt-16 sm:mt-6">
-              <Button
-                className="text-xs sm:text-base"
-                label="Login"
-                color="primary"
-              />
-              <Button
-                className="text-xs sm:text-base"
-                label="Register"
-                color="primary"
-                outlined
-              />
+              <Link href="/login">
+                <Button
+                  className="text-xs sm:text-base"
+                  label="Login"
+                  color="primary"
+                />
+              </Link>
+              <Link href="/register">
+                <Button
+                  className="text-xs sm:text-base"
+                  label="Get started"
+                  color="primary"
+                  outlined
+                />
+              </Link>
             </div>
           </div>
           <div className="sm:col-start-2 sm:col-end-4 row-start-1 z-0">
