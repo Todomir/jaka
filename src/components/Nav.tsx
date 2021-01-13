@@ -1,10 +1,12 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { ReactElement, useContext } from 'react'
 
 import { DarkModeContext } from '@store/DarkModeContext'
 
 import Button from './Button'
+import Icon from './Icon'
 import Switch from './Switch'
 
 export default function Nav(): ReactElement {
@@ -21,8 +23,40 @@ export default function Nav(): ReactElement {
         </div>
 
         <div className="hidden sm:flex space-x-10">
-          <Button label="Login" color="primary" small />
-          <Button label="Sign in" color="primary" outlined small />
+          <Link href="/login">
+            <Button
+              label="Login"
+              icon={<Icon icon="login" size={24} stroke={2} />}
+              color="primary"
+              small
+            />
+          </Link>
+          <Link href="/register">
+            <Button
+              label="Sign in"
+              icon={<Icon icon="signin" size={24} stroke={2} />}
+              color="primary"
+              outlined
+              small
+            />
+          </Link>
+        </div>
+      </section>
+
+      <section className="fixed bottom-0 w-full h-12 flex overflow-x-auto sm:hidden">
+        <div className="flex justify-evenly items-center w-2/3 mx-auto bg-indigo-500 text-white border rounded-t-xl">
+          <Link href="/login">
+            <div className="flex flex-col justify-center items-center cursor-pointer transition-colors hover:text-indigo-200">
+              <Icon icon="login" size={18} stroke={2} />
+              <p className="text-xs font-semibold tracking-tight">Login</p>
+            </div>
+          </Link>
+          <Link href="/register">
+            <div className="flex flex-col justify-center items-center cursor-pointer transition-colors hover:text-indigo-200">
+              <Icon icon="signin" size={18} stroke={2} />
+              <p className="text-xs font-semibold tracking-tight">Sign in</p>
+            </div>
+          </Link>
         </div>
       </section>
     </nav>
