@@ -1,6 +1,6 @@
 import { ReactElement } from 'react'
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string
   color: 'primary' | 'secondary'
   icon?: ReactElement
