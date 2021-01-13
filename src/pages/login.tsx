@@ -51,7 +51,7 @@ export default function Login(): ReactElement {
             onChange={e => {
               setEmail(e.target.value)
             }}
-            label="Email adress"
+            label="Email address"
           />
           <Input
             value={password}
