@@ -3,6 +3,7 @@ import { ReactElement } from 'react'
 interface ButtonProps {
   label: string
   color: 'primary' | 'secondary'
+  icon?: ReactElement
   small?: boolean
   outlined?: boolean
   className?: string
@@ -14,6 +15,7 @@ interface ButtonProps {
 export default function Button({
   label,
   color,
+  icon,
   small,
   outlined,
   className,
@@ -44,6 +46,7 @@ export default function Button({
       } dark:ring-offset-gray-900`}
       {...props}
     >
+      {icon && <span className="mr-2">{icon}</span>}
       {label}
     </button>
   )
