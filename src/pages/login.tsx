@@ -31,7 +31,7 @@ export default function Login(): ReactElement {
   }
 
   return (
-    <main className="w-screen h-screen grid grid-cols-2">
+    <main className="w-screen h-screen grid grid-cols-1 md:grid-cols-2">
       <section className="h-full py-24 px-20 shadow-lg rounded">
         <Image src="/logo.svg" width={40} height={40} />
         <h1 className="mt-6 text-gray-900 text-4xl font-bold tracking-tighter mb-2">
