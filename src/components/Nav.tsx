@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import { ReactElement, useContext } from 'react'
 
 import { DarkModeContext } from '@store/DarkModeContext'
@@ -10,7 +12,8 @@ export default function Nav(): ReactElement {
   return (
     <nav>
       <section className="px-10 py-5 fixed w-full bg-white flex justify-between items-center dark:bg-gray-900 z-50">
-        <div className="flex justify-center items-center space-x-5">
+        <div className="flex justify-center items-center space-x-4">
+          <Image src="/logo.svg" width={24} height={24} />
           <p className="h-6 font-black font-cursive text-xl tracking-tighter dark:text-white">
             JAKA
           </p>
