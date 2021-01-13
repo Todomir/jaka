@@ -74,7 +74,7 @@ export default function Login(): ReactElement {
         <div className="relative w-full h-full">
           <Image
             src="/login-bg.jpg"
-            quality={100}
+            quality={80}
             layout="fill"
             objectFit="cover"
             priority
