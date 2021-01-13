@@ -2,7 +2,8 @@ import {
   createContext,
   DispatchWithoutAction,
   ReactElement,
-  ReactNode
+  ReactNode,
+  ReactNodeArray
 } from 'react'
 
 import useToggle from '@hooks/useToggle'
@@ -13,7 +14,7 @@ interface IDarkMode {
 }
 
 interface Props {
-  children: ReactNode | [ReactNode]
+  children: ReactNode | ReactNodeArray
 }
 
 export const DarkModeContext = createContext<IDarkMode | null>(null)

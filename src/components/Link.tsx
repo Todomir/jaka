@@ -1,12 +1,20 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { Children, cloneElement } from 'react'
+import { Children, cloneElement, ReactElement } from 'react'
 
-import PropTypes from 'prop-types'
+interface ActiveLinkProps {
+  children: ReactElement
+  activeClassName: string
+  href: string
+  as?: string
+}
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const ActiveLink = ({ children, activeClassName, ...props }) => {
+export default function ActiveLink({
+  children,
+  activeClassName,
+  ...props
+}: ActiveLinkProps): ReactElement {
   const { asPath } = useRouter()
 
   const child = Children.only(children)
@@ -25,9 +33,3 @@ const ActiveLink = ({ children, activeClassName, ...props }) => {
     </Link>
   )
 }
-
-ActiveLink.propTypes = {
-  activeClassName: PropTypes.string.isRequired
-}
-
-export default ActiveLink

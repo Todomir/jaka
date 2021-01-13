@@ -1,3 +1,5 @@
+import { ReactElement } from 'react'
+
 interface ButtonProps {
   label: string
   color: 'primary' | 'secondary'
@@ -9,14 +11,14 @@ interface ButtonProps {
     | undefined
 }
 
-const Button: React.FC<ButtonProps> = ({
+export default function Button({
   label,
   color,
   small,
   outlined,
   className,
   ...props
-}) => {
+}: ButtonProps): ReactElement {
   const renderVariantClasses = () => {
     if (outlined) {
       if (color === 'primary') {
@@ -46,5 +48,3 @@ const Button: React.FC<ButtonProps> = ({
     </button>
   )
 }
-
-export default Button

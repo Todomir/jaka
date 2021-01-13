@@ -1,10 +1,16 @@
+import { ReactElement } from 'react'
+
 interface SwitchProps {
   value: boolean
   darkMode?: boolean
   toggle: () => unknown
 }
 
-const Switch: React.FC<SwitchProps> = ({ value, toggle, darkMode }) => {
+export default function Switch({
+  value,
+  toggle,
+  darkMode
+}: SwitchProps): ReactElement {
   const setBgOnToggle = () => {
     if (value) {
       if (darkMode) {
@@ -44,5 +50,3 @@ const Switch: React.FC<SwitchProps> = ({ value, toggle, darkMode }) => {
     </div>
   )
 }
-
-export default Switch

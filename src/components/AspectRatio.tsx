@@ -1,8 +1,14 @@
+import { ReactElement, ReactNode, ReactNodeArray } from 'react'
+
 interface AspectRatioProps {
+  children: ReactElement | ReactNode | ReactNodeArray
   ratio: number
 }
 
-const AspectRatio: React.FC<AspectRatioProps> = ({ ratio, children }) => {
+export default function AspectRatio({
+  ratio,
+  children
+}: AspectRatioProps): ReactElement {
   return (
     <div
       style={{ paddingBottom: `${(1 / ratio) * 100}%` }}
@@ -14,5 +20,3 @@ const AspectRatio: React.FC<AspectRatioProps> = ({ ratio, children }) => {
     </div>
   )
 }
-
-export default AspectRatio

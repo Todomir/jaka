@@ -1,11 +1,15 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 
+import { ReactElement } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import DarkModeProvider from '@store/DarkModeContext'
 
-const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+export default function MyApp({
+  Component,
+  pageProps
+}: AppProps): ReactElement {
   const client = new QueryClient()
 
   return (
@@ -16,5 +20,3 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
     </QueryClientProvider>
   )
 }
-
-export default MyApp

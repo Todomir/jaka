@@ -1,14 +1,14 @@
 import Head from 'next/head'
 import Image from 'next/image'
 
-import { useContext } from 'react'
+import { ReactElement, useContext } from 'react'
 
 import Button from '@components/Button'
 import Nav from '@components/Nav'
 
 import { DarkModeContext } from '@store/DarkModeContext'
 
-const Home: React.FC = () => {
+export default function Home(): ReactElement {
   const { darkMode } = useContext(DarkModeContext)
   return (
     <div className={`subpixel-antialiased h-screen ${darkMode ? 'dark' : ''}`}>
@@ -78,5 +78,3 @@ const Home: React.FC = () => {
     </div>
   )
 }
-
-export default Home

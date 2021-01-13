@@ -1,10 +1,11 @@
-import { useContext } from 'react'
+import { ReactElement, useContext } from 'react'
 
 import { DarkModeContext } from '@store/DarkModeContext'
 
 import Button from './Button'
 import Switch from './Switch'
-const Nav: React.FC = () => {
+
+export default function Nav(): ReactElement {
   const { darkMode, toggleDarkMode } = useContext(DarkModeContext)
   return (
     <nav>
@@ -24,5 +25,3 @@ const Nav: React.FC = () => {
     </nav>
   )
 }
-
-export default Nav
