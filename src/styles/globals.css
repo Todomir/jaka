@@ -9,8 +9,9 @@ html,
 body {
   padding: 0;
   margin: 0;
+  height: 100vh;
+  width: 100vw;
   text-rendering: optimizeLegibility;
-  @apply bg-white dark:bg-gray-900;
 }
 
 a {

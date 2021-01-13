@@ -24,7 +24,11 @@ export default function DarkModeProvider({ children }: Props): ReactElement {
   const [darkMode, toggleDarkMode] = useToggle()
 
   useEffect(() => {
-    document.body.classList.toggle('dark', darkMode)
+    if (darkMode) {
+      document.body.classList.add('dark', 'bg-gray-900', 'text-white')
+    } else {
+      document.body.classList.remove('dark', 'bg-gray-900', 'text-white')
+    }
   }, [darkMode])
 
   return (
