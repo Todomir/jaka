@@ -11,7 +11,7 @@ import { DarkModeContext } from '@store/DarkModeContext'
 export default function Home(): ReactElement {
   const { darkMode } = useContext(DarkModeContext)
   return (
-    <div className={`subpixel-antialiased h-screen ${darkMode ? 'dark' : ''}`}>
+    <div className={`w-screen h-screen ${darkMode ? 'dark' : ''}`}>
       <header>
         <Head>
           <title>JAKA | Welcome</title>

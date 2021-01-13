@@ -9,6 +9,7 @@ html,
 body {
   padding: 0;
   margin: 0;
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -18,4 +19,13 @@ a {
 
 * {
   box-sizing: border-box;
+  text-rendering: optimizeLegibility;
+}
+
+::-moz-selection {
+  @apply bg-indigo-400 text-white;
+}
+
+::selection {
+  @apply bg-indigo-400 text-white;
 }
