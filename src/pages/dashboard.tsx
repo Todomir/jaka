@@ -14,26 +14,81 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ token }: DashboardProps): ReactElement {
-  const { data } = useGQLQuery('tasks', GET_TASKS, {}, {}, token)
+  const { data, isLoading } = useGQLQuery('tasks', GET_TASKS, {}, {}, token)
 
   return (
     <main>
-      <aside></aside>
-      <section>
-        {data?.tasks.length > 0 ? (
-          <div className="p-3">
-            {data?.tasks.map(task => (
-              <div
-                className="p-3 mb-2 max-w-md rounded-md bg-indigo-50 border border-indigo-200 tracking-tight text-indigo-900 shadow-sm"
-                key={task._id}
-              >
-                <h1 className="font-bold text-xl">{task.title}</h1>
-                <p className="text-sm text-indigo-700">{task.description}</p>
-              </div>
-            ))}
-          </div>
+      <section className="flex justify-center items-center w-screen h-screen">
+        {isLoading ? (
+          <h1>Loading...</h1>
         ) : (
-          <p>No tasks created yet.</p>
+          <div className="grid grid-cols-3 gap-5 items-start">
+            <div
+              id="to-do"
+              className="px-4 py-3 border bg-gray-50 border-gray-200 rounded-lg space-y-2"
+            >
+              <h1 className="-mt-8 font-black tracking-tighter text-3xl text-indigo-300">
+                TO-DO
+              </h1>
+              {data?.tasks
+                .filter(task => task.status === 'to-do')
+                .map(item => (
+                  <div
+                    className="px-6 py-3 bg-white shadow-sm max-w-md border border-gray-200 rounded-md tracking-tight"
+                    key={item._id}
+                  >
+                    <h1 className="font-bold text-xl text-indigo-500">
+                      {item.title}
+                    </h1>
+                    <p className="text-sm text-gray-400">{item.description}</p>
+                  </div>
+                ))}
+            </div>
+
+            <div
+              id="doing"
+              className="px-4 py-3 border bg-gray-50 border-gray-200 rounded-lg space-y-2"
+            >
+              <h1 className="-mt-8 font-black tracking-tighter text-3xl text-blue-300">
+                DOING
+              </h1>
+              {data?.tasks
+                .filter(task => task.status === 'doing')
+                .map(item => (
+                  <div
+                    className="px-6 py-3 bg-white shadow-sm max-w-md border border-gray-200 rounded-md tracking-tight"
+                    key={item._id}
+                  >
+                    <h1 className="font-bold text-xl text-blue-500">
+                      {item.title}
+                    </h1>
+                    <p className="text-sm text-gray-400">{item.description}</p>
+                  </div>
+                ))}
+            </div>
+
+            <div
+              id="done"
+              className="px-4 py-3 border bg-gray-50 border-gray-200 rounded-lg space-y-2"
+            >
+              <h1 className="-mt-8 font-black tracking-tighter text-3xl text-green-300">
+                DONE
+              </h1>
+              {data?.tasks
+                .filter(task => task.status === 'done')
+                .map(item => (
+                  <div
+                    className="px-6 py-3 bg-white shadow-sm max-w-md border border-gray-200 rounded-md tracking-tight"
+                    key={item._id}
+                  >
+                    <h1 className="font-bold text-xl text-green-500">
+                      {item.title}
+                    </h1>
+                    <p className="text-sm text-gray-400">{item.description}</p>
+                  </div>
+                ))}
+            </div>
+          </div>
         )}
       </section>
     </main>
