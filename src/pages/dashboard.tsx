@@ -4,6 +4,9 @@ import { ReactElement } from 'react'
 
 import useGQLQuery from '@hooks/useGQLQuery'
 
+import Button from '@components/Button'
+import Icon from '@components/Icon'
+
 import { parseCookies } from '@utils/parseCookies'
 import { GET_TASKS, VALIDATE_TOKEN } from '@utils/queries'
 
@@ -18,11 +21,18 @@ export default function Dashboard({ token }: DashboardProps): ReactElement {
 
   return (
     <main>
-      <section className="flex justify-center items-center w-screen h-screen">
+      <section className="flex flex-col justify-center items-center h-screen">
         {isLoading ? (
           <h1>Loading...</h1>
         ) : (
           <div className="grid grid-cols-3 gap-5 items-start">
+            <footer className="row-start-2">
+              <Button
+                label="Add new task"
+                icon={<Icon icon="plus" />}
+                color="primary"
+              />
+            </footer>
             <div
               id="to-do"
               className="px-4 py-3 border bg-gray-50 border-gray-200 rounded-lg space-y-2"
@@ -30,6 +40,7 @@ export default function Dashboard({ token }: DashboardProps): ReactElement {
               <h1 className="-mt-8 font-black tracking-tighter text-3xl text-indigo-300">
                 TO-DO
               </h1>
+
               {data?.tasks
                 .filter(task => task.status === 'to-do')
                 .map(item => (
