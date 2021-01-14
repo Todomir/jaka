@@ -31,3 +31,7 @@ a {
 ::selection {
   @apply bg-indigo-400 text-white;
 }
+
+button:disabled {
+  @apply border border-gray-200 bg-gray-300 text-gray-500 cursor-wait hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-500 dark:hover:bg-gray-800 dark:border-gray-700;
+}
