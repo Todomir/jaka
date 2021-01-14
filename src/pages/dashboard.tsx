@@ -48,10 +48,10 @@ export default function Dashboard({ token }: DashboardProps): ReactElement {
                     className="px-6 py-3 bg-white shadow-sm max-w-md border border-gray-200 rounded-md tracking-tight"
                     key={item._id}
                   >
-                    <h1 className="font-bold text-xl text-indigo-500">
+                    <h1 className="font-bold text-lg text-indigo-500">
                       {item.title}
                     </h1>
-                    <p className="text-sm text-gray-400">{item.description}</p>
+                    <p className="text-xs text-gray-400">{item.description}</p>
                   </div>
                 ))}
             </div>
@@ -70,10 +70,10 @@ export default function Dashboard({ token }: DashboardProps): ReactElement {
                     className="px-6 py-3 bg-white shadow-sm max-w-md border border-gray-200 rounded-md tracking-tight"
                     key={item._id}
                   >
-                    <h1 className="font-bold text-xl text-blue-500">
+                    <h1 className="font-bold text-lg text-blue-500">
                       {item.title}
                     </h1>
-                    <p className="text-sm text-gray-400">{item.description}</p>
+                    <p className="text-xs text-gray-400">{item.description}</p>
                   </div>
                 ))}
             </div>
@@ -92,10 +92,10 @@ export default function Dashboard({ token }: DashboardProps): ReactElement {
                     className="px-6 py-3 bg-white shadow-sm max-w-md border border-gray-200 rounded-md tracking-tight"
                     key={item._id}
                   >
-                    <h1 className="font-bold text-xl text-green-500">
+                    <h1 className="font-bold text-lg text-green-500">
                       {item.title}
                     </h1>
-                    <p className="text-sm text-gray-400">{item.description}</p>
+                    <p className="text-xs text-gray-400">{item.description}</p>
                   </div>
                 ))}
             </div>
