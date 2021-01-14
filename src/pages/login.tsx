@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { ReactElement, useState } from 'react'
+import { useCookies } from 'react-cookie'
 import { useForm } from 'react-hook-form'
 
 import useGQLClient from '@hooks/useGQLClient'
@@ -14,6 +15,7 @@ import { LOGIN } from '@utils/queries'
 
 export default function Login(): ReactElement {
   const [loading, setLoading] = useState<boolean>(false)
+  const [, setCookie] = useCookies(['token'])
 
   const { register, handleSubmit, errors } = useForm()
 
@@ -24,7 +26,13 @@ export default function Login(): ReactElement {
     setLoading(true)
     try {
       const data = await client.request(LOGIN, { email, password })
-      console.log(data)
+
+      setCookie('token', data.login.token, {
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60, // Expires after 7d
+        sameSite: true,
+        secure: process.env.NODE_ENV === 'production'
+      })
 
       router.push('/dashboard')
     } catch (err) {

@@ -23,13 +23,11 @@ export default function Login(): ReactElement {
   const handleRegister = async ({ name, email, password }) => {
     setLoading(true)
     try {
-      const res = await client.request(SIGN_UP, {
+      await client.request(SIGN_UP, {
         name,
         email,
         password
       })
-      console.log(res)
-
       router.push('/login')
     } catch (err) {
       throw new Error(err.message)

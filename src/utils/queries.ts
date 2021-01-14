@@ -32,3 +32,23 @@ export const SIGN_UP = gql`
     }
   }
 `
+
+export const VALIDATE_TOKEN = gql`
+  mutation($token: String!) {
+    validateToken(token: $token)
+  }
+`
+
+export const GET_TASKS = gql`
+  query {
+    tasks {
+      _id
+      title
+      description
+      status
+      author {
+        _id
+      }
+    }
+  }
+`

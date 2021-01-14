@@ -2,6 +2,7 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 
 import { ReactElement } from 'react'
+import { CookiesProvider } from 'react-cookie'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import DarkModeProvider from '@store/DarkModeContext'
@@ -15,7 +16,9 @@ export default function MyApp({
   return (
     <QueryClientProvider client={client}>
       <DarkModeProvider>
-        <Component {...pageProps} />
+        <CookiesProvider>
+          <Component {...pageProps} />
+        </CookiesProvider>
       </DarkModeProvider>
     </QueryClientProvider>
   )
