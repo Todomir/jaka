@@ -10,6 +10,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?:
     | ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void)
     | undefined
+  loading?: boolean
+  loadingMessage?: string
 }
 
 export default function Button({
@@ -19,6 +21,8 @@ export default function Button({
   small,
   outlined,
   className,
+  loading,
+  loadingMessage,
   ...props
 }: ButtonProps): ReactElement {
   const renderVariantClasses = () => {
@@ -39,6 +43,7 @@ export default function Button({
 
   return (
     <button
+      disabled={loading}
       className={`flex justify-center items-center px-4 py-2 min-w-70 font-semibold transition-colors ${renderVariantClasses()} ${
         small ? 'text-sm' : 'text-md'
       } ${className} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:${
@@ -47,7 +52,7 @@ export default function Button({
       {...props}
     >
       {icon && <span className="mr-2">{icon}</span>}
-      {label}
+      {loading ? loadingMessage : label}
     </button>
   )
 }
