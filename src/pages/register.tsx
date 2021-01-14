@@ -2,7 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { FormEvent, ReactElement, useState } from 'react'
+import { ReactElement, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 import useGQLClient from '@hooks/useGQLClient'
 
@@ -12,22 +13,28 @@ import Input from '@components/Input'
 import { SIGN_UP } from '@utils/queries'
 
 export default function Login(): ReactElement {
-  const [name, setName] = useState<string>('')
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const { register, handleSubmit, errors } = useForm()
 
   const client = useGQLClient()
   const router = useRouter()
 
-  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
+  const handleRegister = async ({ name, email, password }) => {
+    setLoading(true)
     try {
-      const data = await client.request(SIGN_UP, { name, email, password })
-      console.log(data)
+      const res = await client.request(SIGN_UP, {
+        name,
+        email,
+        password
+      })
+      console.log(res)
+
       router.push('/login')
     } catch (err) {
       throw new Error(err.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -57,28 +64,43 @@ export default function Login(): ReactElement {
             </a>
           </Link>
         </span>
-        <form className="mt-16 flex flex-col max-w-lg" onSubmit={handleLogin}>
+        <form
+          className="mt-16 flex flex-col max-w-lg"
+          onSubmit={handleSubmit(handleRegister)}
+        >
           <Input
-            value={name}
-            onChange={e => {
-              setName(e.target.value)
-            }}
             label="Full name"
+            name="name"
+            errors={errors}
+            ref={register({
+              required: 'Name field cannot be empty',
+              minLength: {
+                value: 2,
+                message: 'Name must be at least 2 characters long'
+              }
+            })}
           />
           <Input
-            value={email}
-            onChange={e => {
-              setEmail(e.target.value)
-            }}
+            type="email"
             label="Email address"
+            name="email"
+            errors={errors}
+            ref={register({
+              required: 'Email address field cannot be empty'
+            })}
           />
           <Input
-            value={password}
-            onChange={e => {
-              setPassword(e.target.value)
-            }}
             type="password"
             label="Password"
+            name="password"
+            errors={errors}
+            ref={register({
+              required: 'Password field cannot be empty',
+              minLength: {
+                value: 8,
+                message: 'Password must be at least 8 characters long'
+              }
+            })}
           />
 
           <Button
@@ -86,6 +108,8 @@ export default function Login(): ReactElement {
             className="mt-16 rounded w-full shadow"
             label="Sign up"
             color="primary"
+            loading={loading}
+            loadingMessage="Creating new user"
           />
         </form>
       </section>
