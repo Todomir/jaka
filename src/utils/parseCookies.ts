@@ -1,5 +1,3 @@
-import { NextApiRequest } from 'next'
-
 import cookie from 'cookie'
 import { IncomingMessage } from 'http'
 

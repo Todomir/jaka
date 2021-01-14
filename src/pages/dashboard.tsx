@@ -14,18 +14,15 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ token }: DashboardProps): ReactElement {
-  const {
-    data: { tasks },
-    error
-  } = useGQLQuery('tasks', GET_TASKS, {}, {}, token)
+  const { data } = useGQLQuery('tasks', GET_TASKS, {}, {}, token)
 
   return (
     <main>
       <aside></aside>
       <section>
-        {tasks.length > 0 ? (
+        {data?.tasks.length > 0 ? (
           <div className="p-3">
-            {tasks.map(task => (
+            {data?.tasks.map(task => (
               <div
                 className="p-3 mb-2 max-w-md rounded-md bg-indigo-50 border border-indigo-200 tracking-tight text-indigo-900 shadow-sm"
                 key={task._id}
