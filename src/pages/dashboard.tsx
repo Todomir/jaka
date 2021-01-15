@@ -1,114 +1,119 @@
 import { GetServerSideProps } from 'next'
 
-import { ReactElement } from 'react'
+import { ReactElement, useCallback, useEffect, useReducer } from 'react'
+import { DragDropContext } from 'react-beautiful-dnd'
+import NoSSR from 'react-no-ssr'
+import { QueryClient, useQuery, useQueryClient } from 'react-query'
+import { dehydrate } from 'react-query/hydration'
 
-import useGQLQuery from '@hooks/useGQLQuery'
-
-import Button from '@components/Button'
-import Icon from '@components/Icon'
+import TaskList from '@components/TaskList'
 
 import { parseCookies } from '@utils/parseCookies'
-import { GET_TASKS, VALIDATE_TOKEN } from '@utils/queries'
+import { GET_TASKS, UPDATE_TASKS, VALIDATE_TOKEN } from '@utils/queries'
 
 import { GraphQLClient } from 'graphql-request'
+import produce from 'immer'
 
 interface DashboardProps {
   token: string
 }
 
+export interface ITask {
+  _id: string
+  title: string
+  description: string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+export interface ITasks {
+  todo: [ITask]
+  doing: [ITask]
+  done: [ITask]
+}
+
+const dragReducer = produce((draft, action) => {
+  switch (action.type) {
+    case 'MOVE': {
+      draft[action.from] = draft[action.from] || []
+      draft[action.to] = draft[action.to] || []
+      const [removed] = draft[action.from].splice(action.fromIndex, 1)
+      draft[action.to].splice(action.toIndex, 0, removed)
+    }
+  }
+})
+
 export default function Dashboard({ token }: DashboardProps): ReactElement {
-  const { data, isLoading } = useGQLQuery('tasks', GET_TASKS, {}, {}, token)
+  const headers = {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  }
+
+  const queryClient = useQueryClient()
+  const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL, headers)
+
+  const { data } = useQuery('tasks', async () => {
+    return await client.request(GET_TASKS)
+  })
+
+  const updateTasks = async (data: ITasks) => {
+    const newTaskArr = { ...data }
+
+    const tasks = {
+      todo: newTaskArr.todo,
+      doing: newTaskArr.doing,
+      done: newTaskArr.done
+    }
+
+    return await client.request(UPDATE_TASKS, { tasks })
+  }
+
+  const [tasks, dispatch] = useReducer(dragReducer, data.tasks[0])
+
+  useEffect(() => {
+    updateTasks(tasks).then(() => {
+      queryClient.invalidateQueries('tasks')
+    })
+  }, [tasks])
+
+  const onDragEnd = useCallback(result => {
+    if (result.reason === 'DROP') {
+      if (!result.destination) {
+        return
+      }
+      dispatch({
+        type: 'MOVE',
+        from: result.source.droppableId,
+        to: result.destination.droppableId,
+        fromIndex: result.source.index,
+        toIndex: result.destination.index
+      })
+    }
+  }, [])
 
   return (
-    <main>
-      <section className="flex flex-col justify-center items-center h-screen">
-        {isLoading ? (
-          <h1>Loading...</h1>
-        ) : (
-          <div className="grid grid-cols-3 gap-5 items-start">
-            <footer className="row-start-2">
-              <Button
-                label="Add new task"
-                icon={<Icon icon="plus" />}
-                color="primary"
-              />
-            </footer>
-            <div
-              id="to-do"
-              className="px-4 py-3 border bg-gray-50 border-gray-200 rounded-lg space-y-2"
-            >
-              <h1 className="-mt-8 font-black tracking-tighter text-3xl text-indigo-300">
-                TO-DO
-              </h1>
-
-              {data?.tasks
-                .filter(task => task.status === 'to-do')
-                .map(item => (
-                  <div
-                    className="px-6 py-3 bg-white shadow-sm max-w-md border border-gray-200 rounded-md tracking-tight"
-                    key={item._id}
-                  >
-                    <h1 className="font-bold text-lg text-indigo-500">
-                      {item.title}
-                    </h1>
-                    <p className="text-xs text-gray-400">{item.description}</p>
-                  </div>
-                ))}
-            </div>
-
-            <div
-              id="doing"
-              className="px-4 py-3 border bg-gray-50 border-gray-200 rounded-lg space-y-2"
-            >
-              <h1 className="-mt-8 font-black tracking-tighter text-3xl text-blue-300">
-                DOING
-              </h1>
-              {data?.tasks
-                .filter(task => task.status === 'doing')
-                .map(item => (
-                  <div
-                    className="px-6 py-3 bg-white shadow-sm max-w-md border border-gray-200 rounded-md tracking-tight"
-                    key={item._id}
-                  >
-                    <h1 className="font-bold text-lg text-blue-500">
-                      {item.title}
-                    </h1>
-                    <p className="text-xs text-gray-400">{item.description}</p>
-                  </div>
-                ))}
-            </div>
-
-            <div
-              id="done"
-              className="px-4 py-3 border bg-gray-50 border-gray-200 rounded-lg space-y-2"
-            >
-              <h1 className="-mt-8 font-black tracking-tighter text-3xl text-green-300">
-                DONE
-              </h1>
-              {data?.tasks
-                .filter(task => task.status === 'done')
-                .map(item => (
-                  <div
-                    className="px-6 py-3 bg-white shadow-sm max-w-md border border-gray-200 rounded-md tracking-tight"
-                    key={item._id}
-                  >
-                    <h1 className="font-bold text-lg text-green-500">
-                      {item.title}
-                    </h1>
-                    <p className="text-xs text-gray-400">{item.description}</p>
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
-      </section>
+    <main className="w-screen h-screen">
+      <NoSSR>
+        <section className="flex h-full justify-center items-center">
+          <DragDropContext onDragEnd={result => onDragEnd(result)}>
+            <TaskList tasks={tasks} />
+          </DragDropContext>
+        </section>
+      </NoSSR>
     </main>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   const { token } = parseCookies(req)
-  const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL)
+  const queryClient = new QueryClient()
+  const headers = {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  }
+  const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL, headers)
 
   try {
     const data = await client.request(VALIDATE_TOKEN, { token })
@@ -118,6 +123,11 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
       if (!auth) {
         res.writeHead(302, { Location: '/login' })
         res.end()
+      } else {
+        await queryClient.prefetchQuery(
+          'tasks',
+          async () => await client.request(GET_TASKS)
+        )
       }
     }
   } catch (error) {
@@ -129,6 +139,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   }
 
   return {
-    props: { token }
+    props: { token, dehydratedState: dehydrate(queryClient) }
   }
 }

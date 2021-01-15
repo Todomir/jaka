@@ -7,6 +7,9 @@ module.exports = {
   ],
   darkMode: 'class', // or 'media' or false
   theme: {
+    minHeight: {
+      tasks: '20rem'
+    },
     extend: {
       fontSize: {
         '10xl': '200px'

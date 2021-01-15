@@ -43,11 +43,46 @@ export const GET_TASKS = gql`
   query {
     tasks {
       _id
-      title
-      description
-      status
+      todo {
+        _id
+        title
+        description
+      }
+      doing {
+        _id
+        title
+        description
+      }
+      done {
+        _id
+        title
+        description
+      }
+    }
+  }
+`
+
+export const UPDATE_TASKS = gql`
+  mutation($tasks: NewTasksInput!) {
+    updateTasks(tasks: $tasks) {
+      _id
       author {
         _id
+      }
+      todo {
+        _id
+        title
+        description
+      }
+      doing {
+        _id
+        title
+        description
+      }
+      done {
+        _id
+        title
+        description
       }
     }
   }
