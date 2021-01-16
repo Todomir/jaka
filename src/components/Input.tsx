@@ -24,7 +24,7 @@ const Input = (
           errors && errors[name] ? 'border-red-600' : 'border-gray-200'
         } shadow-sm rounded focus:outline-none focus:ring-1 focus:${
           errors && errors[name] ? 'ring-red-600' : 'ring-indigo-400'
-        }`}
+        } dark:bg-gray-800 dark:border-gray-700`}
         value={value}
         onChange={onChange}
         name={name}

@@ -51,7 +51,7 @@ export default function Login(): ReactElement {
       </section>
       <section className="h-full py-24 px-20 shadow-lg rounded">
         <Image src="/logo.svg" width={40} height={40} />
-        <h1 className="mt-6 text-gray-900 text-4xl font-bold tracking-tighter mb-2">
+        <h1 className="mt-6 text-gray-900 text-4xl font-bold tracking-tighter mb-2 dark:text-gray-100">
           Sign up to <span className="font-cursive">JAKA</span>
         </h1>
         <span className="text-gray-500 text-sm">
