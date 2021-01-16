@@ -11,7 +11,7 @@ interface TaskListProps {
 
 export default function TaskList({ tasks }: TaskListProps): ReactElement {
   return (
-    <div className="flex space-x-5">
+    <div className="grid px-10 overflow-auto w-full mx-auto sm:grid-cols-3 gap-5">
       <div>
         <h1 className="text-3xl text-indigo-400 tracking-tighter font-extrabold">
           TO-DO
@@ -24,7 +24,7 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
                 ref={provided.innerRef}
                 className={`border p-3 ${
                   snapshot.isDraggingOver ? 'bg-indigo-50' : 'bg-gray-100'
-                } border-gray-200 rounded-lg min-h-tasks w-72 ${
+                } border-gray-200 rounded-lg ${
                   snapshot.isDraggingOver
                     ? 'dark:bg-gray-700 dark:border-gray-600'
                     : 'dark:bg-gray-900 dark:border-gray-600'
@@ -49,7 +49,7 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
                 ref={provided.innerRef}
                 className={`border p-3 ${
                   snapshot.isDraggingOver ? 'bg-blue-50' : 'bg-gray-100'
-                } border-gray-200 rounded-lg min-h-tasks w-72 ${
+                } border-gray-200 rounded-lg ${
                   snapshot.isDraggingOver
                     ? 'dark:bg-gray-700 dark:border-gray-600'
                     : 'dark:bg-gray-900 dark:border-gray-600'
@@ -74,7 +74,7 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
                 ref={provided.innerRef}
                 className={`border p-3 ${
                   snapshot.isDraggingOver ? 'bg-green-50' : 'bg-gray-100'
-                } border-gray-200 rounded-lg min-h-tasks w-80 ${
+                } border-gray-200 rounded-lg ${
                   snapshot.isDraggingOver
                     ? 'dark:bg-gray-700 dark:border-gray-600'
                     : 'dark:bg-gray-900 dark:border-gray-600'

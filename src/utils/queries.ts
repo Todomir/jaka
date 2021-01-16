@@ -35,7 +35,14 @@ export const SIGN_UP = gql`
 
 export const VALIDATE_TOKEN = gql`
   mutation($token: String!) {
-    validateToken(token: $token)
+    validateToken(token: $token) {
+      token
+      user {
+        _id
+        name
+        email
+      }
+    }
   }
 `
 

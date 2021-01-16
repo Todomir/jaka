@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 
 import { ReactElement, useCallback, useEffect, useReducer } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
@@ -6,17 +6,14 @@ import NoSSR from 'react-no-ssr'
 import { QueryClient, useQuery, useQueryClient } from 'react-query'
 import { dehydrate } from 'react-query/hydration'
 
+import Sidebar from '@components/Sidebar'
 import TaskList from '@components/TaskList'
 
-import { parseCookies } from '@utils/parseCookies'
 import { GET_TASKS, UPDATE_TASKS, VALIDATE_TOKEN } from '@utils/queries'
 
 import { GraphQLClient } from 'graphql-request'
 import produce from 'immer'
-
-interface DashboardProps {
-  token: string
-}
+import { parseCookies } from 'nookies'
 
 export interface ITask {
   _id: string
@@ -43,20 +40,21 @@ const dragReducer = produce((draft, action) => {
   }
 })
 
-export default function Dashboard({ token }: DashboardProps): ReactElement {
-  const headers = {
+export default function Dashboard({
+  token,
+  user
+}: InferGetServerSidePropsType<typeof getServerSideProps>): ReactElement {
+  const queryClient = useQueryClient()
+
+  const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL, {
     headers: {
       authorization: `Bearer ${token}`
     }
-  }
-
-  const queryClient = useQueryClient()
-  const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL, headers)
+  })
 
   const { data } = useQuery('tasks', async () => {
     return await client.request(GET_TASKS)
   })
-
   const updateTasks = async (data: ITasks) => {
     const newTaskArr = { ...data }
 
@@ -68,7 +66,6 @@ export default function Dashboard({ token }: DashboardProps): ReactElement {
 
     return await client.request(UPDATE_TASKS, { tasks })
   }
-
   const [tasks, dispatch] = useReducer(dragReducer, data.tasks[0])
 
   useEffect(() => {
@@ -93,9 +90,10 @@ export default function Dashboard({ token }: DashboardProps): ReactElement {
   }, [])
 
   return (
-    <main className="w-screen h-screen">
+    <main className="grid w-screen h-screen">
+      <Sidebar user={user} />
       <NoSSR>
-        <section className="flex h-full justify-center items-center">
+        <section className="mt-5 row-start-1 grid pb-20">
           <DragDropContext onDragEnd={result => onDragEnd(result)}>
             <TaskList tasks={tasks} />
           </DragDropContext>
@@ -105,8 +103,8 @@ export default function Dashboard({ token }: DashboardProps): ReactElement {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
-  const { token } = parseCookies(req)
+export const getServerSideProps: GetServerSideProps = async ctx => {
+  const { token } = parseCookies(ctx, 'token')
   const queryClient = new QueryClient()
   const headers = {
     headers: {
@@ -117,28 +115,37 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
 
   try {
     const data = await client.request(VALIDATE_TOKEN, { token })
-    const auth = data.validateToken
+    const response = data.validateToken
 
-    if (res) {
-      if (!auth) {
-        res.writeHead(302, { Location: '/login' })
-        res.end()
+    if (ctx.res) {
+      if (!response.user) {
+        ctx.res.writeHead(302, { Location: '/login' })
+        ctx.res.end()
       } else {
         await queryClient.prefetchQuery(
           'tasks',
           async () => await client.request(GET_TASKS)
         )
+
+        return {
+          props: {
+            token,
+            user: response.user,
+            dehydratedState: dehydrate(queryClient)
+          }
+        }
       }
     }
   } catch (error) {
     console.log(error.message)
-    if (res) {
-      res.writeHead(302, { Location: '/login' })
-      res.end()
+
+    if (ctx.res) {
+      ctx.res.writeHead(302, { Location: '/login' })
+      ctx.res.end()
     }
   }
 
   return {
-    props: { token, dehydratedState: dehydrate(queryClient) }
+    props: { token, user: null, dehydratedState: dehydrate(queryClient) }
   }
 }

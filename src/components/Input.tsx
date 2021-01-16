@@ -21,9 +21,9 @@ const Input = (
       <input
         {...props}
         className={`py-2 px-3 border ${
-          errors[name] ? 'border-red-600' : 'border-gray-200'
+          errors && errors[name] ? 'border-red-600' : 'border-gray-200'
         } shadow-sm rounded focus:outline-none focus:ring-1 focus:${
-          errors[name] ? 'ring-red-600' : 'ring-indigo-400'
+          errors && errors[name] ? 'ring-red-600' : 'ring-indigo-400'
         }`}
         value={value}
         onChange={onChange}
@@ -31,7 +31,7 @@ const Input = (
         id={name}
         ref={ref}
       />
-      {errors[name] && (
+      {errors && errors[name] && (
         <p className="text-sm text-red-600">{errors[name].message}</p>
       )}
     </div>

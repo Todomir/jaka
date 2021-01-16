@@ -2,9 +2,7 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 
 import { ReactElement } from 'react'
-import { CookiesProvider } from 'react-cookie'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools'
 import { Hydrate } from 'react-query/hydration'
 
 import DarkModeProvider from '@store/DarkModeContext'
@@ -18,11 +16,8 @@ export default function MyApp({
   return (
     <QueryClientProvider client={client}>
       <Hydrate state={pageProps.dehydratedState}>
-        <ReactQueryDevtools initialIsOpen={false} />
         <DarkModeProvider>
-          <CookiesProvider>
-            <Component {...pageProps} />
-          </CookiesProvider>
+          <Component {...pageProps} />
         </DarkModeProvider>
       </Hydrate>
     </QueryClientProvider>
