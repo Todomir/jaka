@@ -162,7 +162,7 @@ export default function Sidebar({
             activeClassName="flex bg-white text-indigo-500 shadow-sm border-b-4 sm:border-l-4 border-indigo-500"
           >
             <a className="flex items-center space-x-3 text-gray-500 px-4 py-2 font-semibold transition-colors hover:text-indigo-400 dark:text-gray-400 dark:hover:text-indigo-300">
-              <Icon icon="user" /> <p className="hidden md:block">My profile</p>
+              <Icon icon="user" /> <p className="hidden md:block">Profile</p>
             </a>
           </ActiveLink>
         </article>
