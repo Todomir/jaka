@@ -1,5 +1,7 @@
 import { ReactElement } from 'react'
 
+import useWindowSize from '@hooks/useWindowSize'
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string
   color: 'primary' | 'secondary'
@@ -41,17 +43,19 @@ export default function Button({
     }
   }
 
+  const { width } = useWindowSize()
+
   return (
     <button
       disabled={loading}
-      className={`flex justify-center items-center px-4 py-2 min-w-70 font-semibold transition-colors ${renderVariantClasses()} ${
+      className={`flex justify-center items-center px-4 py-2 min-w-70 font-semibold transition-colors text-center ${renderVariantClasses()} ${
         small ? 'text-sm' : 'text-md'
       } ${className} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:${
         color === 'primary' ? 'ring-indigo-500' : 'ring-purple-500'
       } dark:ring-offset-gray-900`}
       {...props}
     >
-      {icon && <span className="mr-2">{icon}</span>}
+      {icon && <span className={width < 1280 ? '' : 'mr-2'}>{icon}</span>}
       {loading ? loadingMessage : label}
     </button>
   )

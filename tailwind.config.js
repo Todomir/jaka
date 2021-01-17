@@ -11,7 +11,8 @@ module.exports = {
       },
       gridTemplateColumns: {
         hero: '2fr 1fr 1fr',
-        'hero-elements': '1fr auto auto'
+        'hero-elements': '1fr auto auto',
+        dashboard: 'auto 1fr'
       },
       gridTemplateRows: {
         hero: '1fr auto',

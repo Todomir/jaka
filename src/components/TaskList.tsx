@@ -11,7 +11,7 @@ interface TaskListProps {
 
 export default function TaskList({ tasks }: TaskListProps): ReactElement {
   return (
-    <div className="grid px-10 overflow-auto mx-auto sm:grid-cols-3 gap-5">
+    <div className="grid overflow-auto md:grid-cols-3 gap-5">
       <div>
         <h1 className="text-3xl text-indigo-400 tracking-tighter font-extrabold">
           TO-DO
@@ -30,7 +30,9 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
                     : 'dark:bg-gray-900 dark:border-gray-600'
                 }`}
               >
-                <TaskInnerList color="indigo" items={tasks.todo} />
+                {tasks && tasks.todo && (
+                  <TaskInnerList color="indigo" items={tasks.todo} />
+                )}
                 {provided.placeholder}
               </div>
             )
@@ -55,7 +57,9 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
                     : 'dark:bg-gray-900 dark:border-gray-600'
                 }`}
               >
-                <TaskInnerList color="blue" items={tasks.doing} />
+                {tasks && tasks.doing && (
+                  <TaskInnerList color="blue" items={tasks.doing} />
+                )}
                 {provided.placeholder}
               </div>
             )
@@ -80,7 +84,9 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
                     : 'dark:bg-gray-900 dark:border-gray-600'
                 }`}
               >
-                <TaskInnerList color="green" items={tasks.done} />
+                {tasks && tasks.done && (
+                  <TaskInnerList color="green" items={tasks.done} />
+                )}
                 {provided.placeholder}
               </section>
             )

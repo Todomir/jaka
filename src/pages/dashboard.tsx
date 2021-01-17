@@ -3,7 +3,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { ReactElement, useCallback, useEffect, useReducer } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import NoSSR from 'react-no-ssr'
-import { QueryClient, useQuery, useQueryClient } from 'react-query'
+import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query'
 import { dehydrate } from 'react-query/hydration'
 
 import Sidebar from '@components/Sidebar'
@@ -29,14 +29,27 @@ export interface ITasks {
   done: [ITask]
 }
 
-const dragReducer = produce((draft, action) => {
+// Tasks reducer
+const tasksReducer = produce((draft, action) => {
   switch (action.type) {
     case 'MOVE': {
       draft[action.from] = draft[action.from] || []
       draft[action.to] = draft[action.to] || []
       const [removed] = draft[action.from].splice(action.fromIndex, 1)
       draft[action.to].splice(action.toIndex, 0, removed)
+      break
     }
+    case 'ADD': {
+      draft.todo.push(action.task)
+      break
+    }
+    case 'FETCH_SUCCESS': {
+      draft = action.payload
+      break
+    }
+
+    default:
+      return draft
   }
 })
 
@@ -44,34 +57,44 @@ export default function Dashboard({
   token,
   user
 }: InferGetServerSidePropsType<typeof getServerSideProps>): ReactElement {
-  const queryClient = useQueryClient()
-
+  // GraphQL Client chunk
   const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL, {
     headers: {
       authorization: `Bearer ${token}`
     }
   })
 
+  // React Query chunk
+  const queryClient = useQueryClient()
+
   const { data } = useQuery('tasks', async () => {
-    return await client.request(GET_TASKS)
+    const data = await client.request(GET_TASKS)
+    return data.tasks[0]
   })
-  const updateTasks = async (data: ITasks) => {
-    const newTaskArr = { ...data }
 
-    const tasks = {
-      todo: newTaskArr.todo,
-      doing: newTaskArr.doing,
-      done: newTaskArr.done
-    }
-
+  const { mutateAsync: updateTasks } = useMutation(async (tasks: ITasks) => {
     return await client.request(UPDATE_TASKS, { tasks })
-  }
-  const [tasks, dispatch] = useReducer(dragReducer, data.tasks[0])
+  })
+
+  const [tasks, dispatch] = useReducer(tasksReducer, data)
 
   useEffect(() => {
-    updateTasks(tasks).then(() => {
-      queryClient.invalidateQueries('tasks')
-    })
+    if (tasks) {
+      ;(async () => {
+        try {
+          await updateTasks({
+            todo: tasks.todo,
+            doing: tasks.doing,
+            done: tasks.done
+          })
+          queryClient.invalidateQueries('tasks')
+        } catch (error) {
+          throw new Error(error.message)
+        } finally {
+          queryClient.invalidateQueries('tasks')
+        }
+      })()
+    }
   }, [tasks])
 
   const onDragEnd = useCallback(result => {
@@ -90,10 +113,10 @@ export default function Dashboard({
   }, [])
 
   return (
-    <main className="grid w-screen h-screen">
-      <Sidebar user={user} />
+    <main className="grid sm:grid-cols-dashboard w-screen h-screen">
+      <Sidebar client={client} dispatch={dispatch} user={user} />
       <NoSSR>
-        <section className="mt-5 row-start-1 grid pb-20">
+        <section className="mt-5 row-start-1 grid mx-5 sm:mx-10 pt-20 pb-20 sm:pl-10 md:pl-36 xl:pl-72 sm:pt-2">
           <DragDropContext onDragEnd={result => onDragEnd(result)}>
             <TaskList tasks={tasks} />
           </DragDropContext>
@@ -122,10 +145,10 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
         ctx.res.writeHead(302, { Location: '/login' })
         ctx.res.end()
       } else {
-        await queryClient.prefetchQuery(
-          'tasks',
-          async () => await client.request(GET_TASKS)
-        )
+        await queryClient.prefetchQuery('tasks', async () => {
+          const data = await client.request(GET_TASKS)
+          return data.tasks[0]
+        })
 
         return {
           props: {
