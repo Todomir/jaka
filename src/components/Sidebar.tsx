@@ -93,7 +93,7 @@ export default function Sidebar({
             type="text"
           >
             <input
-              className="px-2 py-1 mb-3 w-full font-bold text-2xl text-indigo-300 tracking-tighter rounded bg-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-300"
+              className="px-2 py-1 mb-3 w-full font-bold text-2xl text-indigo-300 tracking-tighter rounded bg-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-300 dark:focus:ring-offset-gray-800"
               type="text"
               name="title"
               id="title"
@@ -109,7 +109,7 @@ export default function Sidebar({
             type="textarea"
           >
             <textarea
-              className="px-2 py-1 mt-3 w-full text-base text-gray-400 tracking-tighter bg-transparent rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+              className="px-2 py-1 mt-3 w-full text-base text-gray-400 tracking-tighter bg-transparent rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 dark:focus:ring-offset-gray-800"
               rows={1}
               name="title"
               id="title"
