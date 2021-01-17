@@ -22,12 +22,14 @@ export default function TaskItem({
     <>
       <article>
         <div
-          className={`px-6 py-3 mb-3 ${
-            snapshot.isDragging ? `bg-${color}-50` : 'bg-white'
-          } shadow-sm border border-gray-200 rounded-md tracking-tight select-none ${
+          className={`px-6 py-3 mb-3 shadow-sm bg-white ${
             snapshot.isDragging
-              ? `dark:bg-${color}-900 dark:border-gray-400`
-              : 'dark:bg-gray-800 dark:border-gray-500'
+              ? `border-4 border-${color}-300`
+              : 'border border-gray-100'
+          } rounded-md tracking-tight select-none dark:bg-gray-800 ${
+            snapshot.isDragging
+              ? `dark:border-4 dark:border-${color}-500`
+              : 'dark:border dark:border-gray-700'
           }`}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
