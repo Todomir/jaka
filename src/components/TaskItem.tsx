@@ -22,7 +22,7 @@ export default function TaskItem({
     <>
       <article>
         <div
-          className={`px-6 py-3 mb-3 shadow-sm bg-white ${
+          className={`px-6 py-3 mb-3 shadow-sm transition-colors duration-300 bg-white ${
             snapshot.isDragging
               ? `border-4 border-${color}-300`
               : 'border border-gray-100'

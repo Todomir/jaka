@@ -25,7 +25,13 @@ export default function DarkModeProvider({ children }: Props): ReactElement {
 
   useEffect(() => {
     if (darkMode) {
-      document.body.classList.add('dark', 'bg-gray-900', 'text-white')
+      document.body.classList.add(
+        'dark',
+        'bg-gray-900',
+        'text-white',
+        'transition-colors',
+        'duration-500'
+      )
     } else {
       document.body.classList.remove('dark', 'bg-gray-900', 'text-white')
     }

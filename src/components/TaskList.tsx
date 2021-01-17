@@ -22,7 +22,7 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`border min-h-tasks p-3 ${
+                className={`border min-h-tasks transition-colors duration-500 p-3 ${
                   snapshot.isDraggingOver ? 'bg-indigo-50' : 'bg-gray-100'
                 } border-gray-200 rounded-lg ${
                   snapshot.isDraggingOver
@@ -47,7 +47,7 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`border min-h-tasks p-3 ${
+                className={`border min-h-tasks transition-colors duration-500 p-3 ${
                   snapshot.isDraggingOver ? 'bg-blue-50' : 'bg-gray-100'
                 } border-gray-200 rounded-lg ${
                   snapshot.isDraggingOver
@@ -72,7 +72,7 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
               <section
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`border min-h-tasks p-3 ${
+                className={`border min-h-tasks  transition-colors duration-500 p-3 ${
                   snapshot.isDraggingOver ? 'bg-green-50' : 'bg-gray-100'
                 } border-gray-200 rounded-lg ${
                   snapshot.isDraggingOver
