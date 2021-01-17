@@ -147,7 +147,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
       } else {
         await queryClient.prefetchQuery('tasks', async () => {
           const data = await client.request(GET_TASKS)
-          return data.tasks[0] || null
+          return data.tasks[0] || { todo: [], doing: [], done: [] }
         })
 
         return {
