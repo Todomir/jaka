@@ -6,21 +6,13 @@ import {
 } from 'react'
 
 import { AnimatePresence, motion } from 'framer-motion'
-
-import Button from './Button'
-import Icon from './Icon'
-
 interface ModalProps {
   show: boolean
   toggle: DispatchWithoutAction
   children: ReactNode | ReactNodeArray | ReactElement
 }
 
-export default function Modal({
-  show,
-  toggle,
-  children
-}: ModalProps): ReactElement {
+export default function Modal({ show, children }: ModalProps): ReactElement {
   return (
     <AnimatePresence exitBeforeEnter>
       {show && (

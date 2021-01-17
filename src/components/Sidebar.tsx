@@ -140,7 +140,7 @@ export default function Sidebar({
           </footer>
         </form>
       </Modal>
-      <aside className="fixed bottom-0 w-full sm:row-start-1 sm:col-start-1 sm:fixed justify-between sm:justify-start flex sm:flex-col h-12 sm:w-auto xl:w-72 sm:h-screen px-2 md:px-5 py-2 sm:py-5 bg-gray-100 border border-indigo-50 rounded shadow-sm transition-colors duration-500 dark:bg-gray-800 dark:border-gray-700">
+      <aside className="fixed bottom-0 w-full sm:row-start-1 sm:relative sm:col-start-1 justify-between sm:justify-start flex sm:flex-col h-12 sm:w-auto xl:w-72 sm:h-full px-2 md:px-5 py-2 sm:py-5 bg-gray-100 border border-indigo-50 rounded shadow-sm transition-colors duration-500 dark:bg-gray-800 dark:border-gray-700">
         <header className="flex justify-center items-center">
           <p className="text-xl font-bold tracking-tight text-indigo-400 mr-3 hidden md:block">
             {user.name.replace(/ .*/, '')}

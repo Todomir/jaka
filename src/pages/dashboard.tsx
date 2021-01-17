@@ -113,10 +113,10 @@ export default function Dashboard({
   }, [])
 
   return (
-    <main className="grid sm:grid-cols-dashboard w-screen h-screen">
-      <Sidebar client={client} dispatch={dispatch} user={user} />
+    <main className="w-screen h-screen">
       <NoSSR>
-        <section className="mt-5 row-start-1 grid mx-5 sm:mx-10 pt-20 pb-20 sm:pl-10 md:pl-36 xl:pl-72 sm:pt-2">
+        <section className="grid grid-cols-dashboard sm:gap-5 w-full h-full">
+          <Sidebar client={client} dispatch={dispatch} user={user} />
           <DragDropContext onDragEnd={result => onDragEnd(result)}>
             <TaskList tasks={tasks} />
           </DragDropContext>
@@ -147,7 +147,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
       } else {
         await queryClient.prefetchQuery('tasks', async () => {
           const data = await client.request(GET_TASKS)
-          return data.tasks[0]
+          return data.tasks[0] || null
         })
 
         return {
@@ -169,6 +169,6 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   }
 
   return {
-    props: { token, user: null, dehydratedState: dehydrate(queryClient) }
+    props: { token, user: {}, dehydratedState: dehydrate(queryClient) }
   }
 }

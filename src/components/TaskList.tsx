@@ -11,7 +11,7 @@ interface TaskListProps {
 
 export default function TaskList({ tasks }: TaskListProps): ReactElement {
   return (
-    <div className="grid overflow-auto md:grid-cols-3 gap-5">
+    <div className="grid w-full h-full col-start-2 self-center px-10 pt-20 pb-20 overflow-auto md:grid-cols-3 gap-5">
       <div>
         <h1 className="text-3xl text-indigo-400 tracking-tighter font-extrabold">
           TO-DO
@@ -22,7 +22,7 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`border min-h-tasks transition-colors duration-500 p-3 ${
+                className={`border min-h-tasks min-w-full transition-colors duration-500 p-3 ${
                   snapshot.isDraggingOver ? 'bg-indigo-50' : 'bg-gray-100'
                 } border-gray-200 rounded-lg ${
                   snapshot.isDraggingOver
