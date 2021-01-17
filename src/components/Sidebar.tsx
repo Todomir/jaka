@@ -191,7 +191,7 @@ export default function Sidebar({
             small
           />
         </div>
-        <footer className="sm:w-20 md:w-full xl:w-full sm:px-5 sm:absolute sm:bottom-0 flex sm:flex-col h-auto justify-center sm:mb-12 sm:-mx-5 space-x-3 sm:space-x-0 xl:space-x-0">
+        <footer className="sm:w-20 md:w-full xl:w-full sm:px-5 sm:absolute sm:bottom-0 flex sm:flex-col justify-center sm:mb-12 sm:-mx-5 space-x-3 sm:space-x-0 xl:space-x-0">
           <Button
             onClick={toggleModal}
             className="w-full h-full hidden rounded-lg mb-2 sm:flex"

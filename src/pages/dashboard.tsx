@@ -69,7 +69,7 @@ export default function Dashboard({
 
   const { data } = useQuery('tasks', async () => {
     const data = await client.request(GET_TASKS)
-    return data.tasks[0]
+    return data.tasks[0] || { todo: [], doing: [], done: [] }
   })
 
   const { mutateAsync: updateTasks } = useMutation(async (tasks: ITasks) => {
