@@ -11,7 +11,7 @@ interface TaskListProps {
 
 export default function TaskList({ tasks }: TaskListProps): ReactElement {
   return (
-    <div className="grid px-10 overflow-auto w-full mx-auto sm:grid-cols-3 gap-5">
+    <div className="grid px-10 overflow-auto mx-auto sm:grid-cols-3 gap-5">
       <div>
         <h1 className="text-3xl text-indigo-400 tracking-tighter font-extrabold">
           TO-DO
@@ -22,7 +22,7 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`border p-3 ${
+                className={`border min-h-tasks p-3 ${
                   snapshot.isDraggingOver ? 'bg-indigo-50' : 'bg-gray-100'
                 } border-gray-200 rounded-lg ${
                   snapshot.isDraggingOver
@@ -47,7 +47,7 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`border p-3 ${
+                className={`border min-h-tasks p-3 ${
                   snapshot.isDraggingOver ? 'bg-blue-50' : 'bg-gray-100'
                 } border-gray-200 rounded-lg ${
                   snapshot.isDraggingOver
@@ -72,7 +72,7 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
               <section
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`border p-3 ${
+                className={`border min-h-tasks p-3 ${
                   snapshot.isDraggingOver ? 'bg-green-50' : 'bg-gray-100'
                 } border-gray-200 rounded-lg ${
                   snapshot.isDraggingOver
