@@ -6,6 +6,7 @@ import { ReactElement, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import useGQLClient from '@hooks/useGQLClient'
+import useToast from '@hooks/useToast'
 
 import Button from '@components/Button'
 import Icon from '@components/Icon'
@@ -17,6 +18,7 @@ export default function Login(): ReactElement {
   const [loading, setLoading] = useState<boolean>(false)
 
   const { register, handleSubmit, errors } = useForm()
+  const { addToast } = useToast()
 
   const client = useGQLClient()
   const router = useRouter()
@@ -29,9 +31,22 @@ export default function Login(): ReactElement {
         email,
         password
       })
+
+      addToast({
+        title: 'Hooray!',
+        description: 'Your user was created successfully!',
+        status: 'success',
+        duration: 3000
+      })
+
       router.push('/login')
     } catch (err) {
-      throw new Error(err.message)
+      addToast({
+        title: 'Uh oh!',
+        description: `There was an error (${err.response.status}): ${err.response.errors[0].message}`,
+        status: 'danger',
+        duration: 3000
+      })
     } finally {
       setLoading(false)
     }
