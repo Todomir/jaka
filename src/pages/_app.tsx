@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { Hydrate } from 'react-query/hydration'
 
 import DarkModeProvider from '@store/DarkModeContext'
+import ToastProvider from '@store/ToastContext'
 
 export default function MyApp({
   Component,
@@ -17,7 +18,9 @@ export default function MyApp({
     <QueryClientProvider client={client}>
       <Hydrate state={pageProps.dehydratedState}>
         <DarkModeProvider>
-          <Component {...pageProps} />
+          <ToastProvider>
+            <Component {...pageProps} />
+          </ToastProvider>
         </DarkModeProvider>
       </Hydrate>
     </QueryClientProvider>
