@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import useGQLClient from '@hooks/useGQLClient'
 
 import Button from '@components/Button'
+import Icon from '@components/Icon'
 import Input from '@components/Input'
 
 import { SIGN_UP } from '@utils/queries'
@@ -49,7 +50,13 @@ export default function Login(): ReactElement {
           />
         </div>
       </section>
-      <section className="h-full py-24 px-20 shadow-lg rounded">
+      <section className="h-full py-24 px-20 shadow-lg rounded tracking-tight">
+        <Link href="/">
+          <a className="flex items-center mb-12 -mt-7 font-semibold tracking-tight transition-colors duration-300 text-indigo-600 hover:text-indigo-500 dark:text-indigo-300 dark:hover:text-indigo-400">
+            <Icon size={18} icon="arrowLeft" />{' '}
+            <span className="ml-3">Return to home page</span>
+          </a>
+        </Link>
         <Image src="/logo.svg" width={40} height={40} />
         <h1 className="mt-6 text-gray-900 text-4xl font-bold tracking-tighter mb-2 dark:text-gray-100">
           Sign up to <span className="font-cursive">JAKA</span>
