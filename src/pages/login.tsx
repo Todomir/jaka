@@ -6,6 +6,7 @@ import { ReactElement, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import useGQLClient from '@hooks/useGQLClient'
+import useToast from '@hooks/useToast'
 
 import Button from '@components/Button'
 import Icon from '@components/Icon'
@@ -17,6 +18,7 @@ import { setCookie } from 'nookies'
 
 export default function Login(): ReactElement {
   const [loading, setLoading] = useState<boolean>(false)
+  const { addToast } = useToast()
 
   const { register, handleSubmit, errors } = useForm()
 
@@ -35,9 +37,21 @@ export default function Login(): ReactElement {
         secure: process.env.NODE_ENV === 'production'
       })
 
+      addToast({
+        title: 'Success!',
+        description: 'Your login was successful. Redirecting to dashboard page',
+        status: 'success',
+        duration: 3000
+      })
+
       router.push('/dashboard')
     } catch (err) {
-      throw new Error(err.message)
+      addToast({
+        title: 'Uh oh!',
+        description: `There was an error (${err.response.status}): ${err.response.errors[0].message}`,
+        status: 'danger',
+        duration: 3000
+      })
     } finally {
       setLoading(false)
     }
