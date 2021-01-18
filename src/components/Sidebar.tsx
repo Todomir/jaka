@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 
+import useToast from '@hooks/useToast'
 import useToggle from '@hooks/useToggle'
 import useWindowSize from '@hooks/useWindowSize'
 
@@ -40,6 +41,8 @@ export default function Sidebar({
 }: SidebarProps): ReactElement {
   const [logout, toggleLogout] = useToggle()
   const [showModal, toggleModal] = useToggle()
+
+  const { addToast } = useToast()
 
   const [title, setTitle] = useState<string>('Create a new task')
   const [description, setDescription] = useState<string>(
@@ -74,8 +77,20 @@ export default function Sidebar({
       })
       dispatch({ type: 'ADD', task })
       queryClient.invalidateQueries('tasks')
+
+      addToast({
+        title: 'Hooray!',
+        description: 'New task created successfully!',
+        status: 'success',
+        duration: 3000
+      })
     } catch (error) {
-      throw new Error(error.message)
+      addToast({
+        title: 'Uh oh!',
+        description: `There was an error (${error.response.status}): ${error.response.errors[0].message}`,
+        status: 'danger',
+        duration: 3000
+      })
     } finally {
       queryClient.invalidateQueries('tasks')
       toggleModal()
@@ -181,6 +196,13 @@ export default function Sidebar({
             onClick={() => {
               toggleLogout()
               destroyCookie(null, 'token')
+              addToast({
+                title: 'Out already?',
+                description:
+                  'Your logout was successfull. Come back any time! ',
+                status: 'success',
+                duration: 3000
+              })
               router.push('/login')
             }}
             className="w-full h-full flex rounded-lg"
@@ -205,6 +227,13 @@ export default function Sidebar({
             onClick={() => {
               toggleLogout()
               destroyCookie(null, 'token')
+              addToast({
+                title: 'Out already?',
+                description:
+                  'Your logout was successfull. Come back any time! ',
+                status: 'success',
+                duration: 3000
+              })
               router.push('/login')
             }}
             className="w-full h-full hidden rounded-lg sm:flex"
