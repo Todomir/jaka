@@ -16,6 +16,11 @@ import NoSSR from 'react-no-ssr'
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query'
 import { dehydrate } from 'react-query/hydration'
 
+import useToggle from '@hooks/useToggle'
+
+import Button from '@components/Button'
+import Icon from '@components/Icon'
+import Modal from '@components/Modal'
 import Sidebar from '@components/Sidebar'
 import TaskList from '@components/TaskList'
 
@@ -83,6 +88,9 @@ export default function Dashboard({
   })
 
   const [tasks, setTasks] = useState<ITasks>(data)
+  const [deletedId, setDeletedId] = useState<string>('')
+  const [deletedIndex, setDeletedIndex] = useState<number>()
+  const [modal, toggleModal] = useToggle()
 
   useEffect(() => {
     if (tasks) {
@@ -108,14 +116,23 @@ export default function Dashboard({
       if (result.reason === 'DROP') {
         const { source, destination } = result
 
-        const newTasks = produce(tasks, draft => {
-          draft[source.droppableId] = draft[source.droppableId] || []
-          draft[destination.droppableId] = draft[destination.droppableId] || []
-          const [removed] = draft[source.droppableId].splice(source.index, 1)
-          draft[destination.droppableId].splice(destination.index, 0, removed)
-        })
+        if (destination === undefined || destination === null) {
+          setDeletedId(source.droppableId)
+          setDeletedIndex(source.index)
+          toggleModal()
+        } else if (destination.index === source.index) {
+          return null
+        } else {
+          const newTasks = produce(tasks, draft => {
+            draft[source.droppableId] = draft[source.droppableId] || []
+            draft[destination.droppableId] =
+              draft[destination.droppableId] || []
+            const [removed] = draft[source.droppableId].splice(source.index, 1)
+            draft[destination.droppableId].splice(destination.index, 0, removed)
+          })
 
-        setTasks(newTasks)
+          setTasks(newTasks)
+        }
       }
     },
     [tasks]
@@ -124,6 +141,40 @@ export default function Dashboard({
   return (
     <main className="w-screen h-screen">
       <TaskProvider client={client} tasks={tasks} setTasks={setTasks}>
+        <Modal show={modal}>
+          <header>
+            <h1 className="text-3xl font-bold tracking-tight">Delete task</h1>
+          </header>
+          <main className="mt-4">
+            <p className="text-gray-700 dark:text-gray-400">
+              You&apos;re trying to delete a task. This action is permanent and
+              irreversible. Are you sure you want to delete?
+            </p>
+          </main>
+          <footer className="-m-7 py-5 px-7 mt-12 flex justify-between space-x-5 bg-gray-100 border-t border-gray-300 rounded-b-lg dark:bg-gray-700 dark:border-gray-500">
+            <Button
+              className="w-full"
+              color="primary"
+              label="No, go back."
+              onClick={toggleModal}
+              type="button"
+            />
+            <Button
+              className="w-full"
+              color="danger"
+              label="Yes, delete the task."
+              type="button"
+              onClick={() => {
+                const newTasks = produce(tasks, draft => {
+                  draft[deletedId].splice(deletedIndex, 1)
+                })
+                setTasks(newTasks)
+                toggleModal()
+              }}
+              outlined
+            />
+          </footer>
+        </Modal>
         <NoSSR>
           <section className="grid grid-cols-dashboard sm:gap-5 w-full h-full">
             <Sidebar client={client} user={user} />
