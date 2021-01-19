@@ -123,8 +123,6 @@ export default function Dashboard({
           setDeletedId(source.droppableId)
           setDeletedIndex(source.index)
           toggleModal()
-        } else if (destination.index === source.index) {
-          return null
         } else {
           const newTasks = produce(tasks, draft => {
             draft[source.droppableId] = draft[source.droppableId] || []
