@@ -104,3 +104,12 @@ export const CREATE_TASK = gql`
     }
   }
 `
+export const UPDATE_USER = gql`
+  mutation($password: String, $name: String, $id: String!) {
+    updateUser(password: $password, name: $name, id: $id) {
+      _id
+      name
+      email
+    }
+  }
+`
