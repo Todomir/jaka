@@ -98,7 +98,7 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
 
   return (
     <>
-      <Modal show={showModal} toggle={toggleModal}>
+      <Modal show={showModal}>
         <form className="flex flex-col" onSubmit={onCreateTask}>
           <Editable
             childRef={titleRef}

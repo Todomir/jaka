@@ -8,7 +8,6 @@ import {
 import { AnimatePresence, motion } from 'framer-motion'
 interface ModalProps {
   show: boolean
-  toggle: DispatchWithoutAction
   children: ReactNode | ReactNodeArray | ReactElement
 }
 
