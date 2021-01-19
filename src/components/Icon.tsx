@@ -11,7 +11,8 @@ const icons = {
   user: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
   boards:
     'M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2',
-  arrowLeft: 'M10 19l-7-7m0 0l7-7m-7 7h18'
+  arrowLeft: 'M10 19l-7-7m0 0l7-7m-7 7h18',
+  info: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
 }
 
 interface IconProps {
@@ -30,6 +31,8 @@ export default function Icon({
       <path
         fill="none"
         stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         strokeWidth={stroke}
         d={icons[icon]}
       ></path>
