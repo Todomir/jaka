@@ -113,7 +113,6 @@ export default function TaskItem({
           >
             <textarea
               className="px-2 py-1 mt-3 w-full text-xs sm:text-sm text-gray-400 bg-transparent rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 dark:focus:ring-offset-gray-800"
-              rows={1}
               name="title"
               id="title"
               value={description}

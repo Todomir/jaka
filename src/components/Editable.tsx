@@ -8,6 +8,8 @@ import {
   useState
 } from 'react'
 
+import autosize from 'autosize'
+
 interface EditableProps {
   text: string
   type: 'text' | 'textarea'
@@ -30,6 +32,7 @@ export default function Editable({
   useEffect(() => {
     if (childRef && childRef.current && isEditing === true) {
       childRef.current.focus()
+      autosize(childRef.current)
     }
   }, [isEditing, childRef])
 
@@ -46,13 +49,20 @@ export default function Editable({
     - For textarea, check only Escape and Tab key and set the state to false
     - For everything else, all three keys will set the state to false
   */
-    if (
-      (type === 'textarea' && keys.indexOf(key) > -1) ||
-      (type !== 'textarea' && allKeys.indexOf(key) > -1)
-    ) {
-      setEditing(false)
+    if (type === 'textarea') {
+      if (keys.indexOf(key) > -1 || allKeys.indexOf(key) > -1) {
+        setEditing(false)
+      }
     }
   }
+
+  useEffect(() => {
+    if (type === 'textarea') {
+      if (childRef && childRef.current) {
+        autosize.update(childRef.current)
+      }
+    }
+  }, [childRef, text])
 
   return (
     <section {...props}>

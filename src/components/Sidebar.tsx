@@ -148,7 +148,11 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
               color="primary"
               label="Cancel"
               outlined
-              onClick={toggleModal}
+              onClick={() => {
+                setTitle('Create a new task')
+                setDescription('Click on the labels to edit its content.')
+                toggleModal()
+              }}
               type="button"
             />
           </footer>
