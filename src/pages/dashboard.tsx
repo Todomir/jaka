@@ -26,6 +26,7 @@ import TaskList from '@components/TaskList'
 
 import { GET_TASKS, UPDATE_TASKS, VALIDATE_TOKEN } from '@utils/queries'
 
+import { AnimatePresence, motion } from 'framer-motion'
 import { GraphQLClient } from 'graphql-request'
 import produce from 'immer'
 import { parseCookies } from 'nookies'
@@ -91,6 +92,7 @@ export default function Dashboard({
   const [deletedId, setDeletedId] = useState<string>('')
   const [deletedIndex, setDeletedIndex] = useState<number>()
   const [modal, toggleModal] = useToggle()
+  const [showTooltip, toggleTooltip] = useToggle()
 
   useEffect(() => {
     if (tasks) {
@@ -113,6 +115,7 @@ export default function Dashboard({
 
   const onDragEnd = useCallback(
     result => {
+      toggleTooltip()
       if (result.reason === 'DROP') {
         const { source, destination } = result
 
@@ -140,6 +143,24 @@ export default function Dashboard({
 
   return (
     <main className="w-screen h-screen">
+      <AnimatePresence>
+        {showTooltip && (
+          <motion.span
+            initial={{ opacity: 0, y: 2 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 2 }}
+            transition={{ duration: 0.3 }}
+            className="fixed text-xs bottom-0 left-0 w-full flex justify-center items-center mb-16 sm:mb-10 z-50 "
+          >
+            <div className="flex justify-center items-center py-2 px-4 bg-blue-500 text-white font-semibold tracking-tight rounded-md shadow-md w-2/3 sm:w-auto sm:text-sm">
+              <Icon size={28} icon="info" />{' '}
+              <p className="ml-3">
+                You can drop a task outside a droppable column to delete it.
+              </p>
+            </div>
+          </motion.span>
+        )}
+      </AnimatePresence>
       <TaskProvider client={client} tasks={tasks} setTasks={setTasks}>
         <Modal show={modal}>
           <header>
@@ -175,10 +196,14 @@ export default function Dashboard({
             />
           </footer>
         </Modal>
+
         <NoSSR>
           <section className="grid grid-cols-dashboard sm:gap-5 w-full h-full">
             <Sidebar client={client} user={user} />
-            <DragDropContext onDragEnd={result => onDragEnd(result)}>
+            <DragDropContext
+              onDragStart={toggleTooltip}
+              onDragEnd={result => onDragEnd(result)}
+            >
               <TaskList tasks={tasks} />
             </DragDropContext>
           </section>
