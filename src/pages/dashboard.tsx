@@ -42,6 +42,7 @@ export interface ITasks {
 interface ITaskContext {
   tasks: ITasks
   setTasks: Dispatch<SetStateAction<ITasks>>
+  client: GraphQLClient
 }
 interface ITaskProvider extends ITaskContext {
   children: ReactNode | ReactNodeArray | ReactElement
@@ -49,9 +50,9 @@ interface ITaskProvider extends ITaskContext {
 
 export const TaskContext = createContext<ITaskContext>(null)
 
-const TaskProvider = ({ tasks, setTasks, children }: ITaskProvider) => {
+const TaskProvider = ({ tasks, setTasks, children, client }: ITaskProvider) => {
   return (
-    <TaskContext.Provider value={{ tasks, setTasks }}>
+    <TaskContext.Provider value={{ tasks, setTasks, client }}>
       {children}
     </TaskContext.Provider>
   )
@@ -122,7 +123,7 @@ export default function Dashboard({
 
   return (
     <main className="w-screen h-screen">
-      <TaskProvider tasks={tasks} setTasks={setTasks}>
+      <TaskProvider client={client} tasks={tasks} setTasks={setTasks}>
         <NoSSR>
           <section className="grid grid-cols-dashboard sm:gap-5 w-full h-full">
             <Sidebar client={client} user={user} />

@@ -8,9 +8,14 @@ import TaskItem from './TaskItem'
 interface TaskInnerListProps {
   items: [ITask]
   color: string
+  name: string
 }
 
-function TaskInnerList({ items, color }: TaskInnerListProps): ReactElement {
+function TaskInnerList({
+  items,
+  color,
+  name
+}: TaskInnerListProps): ReactElement {
   return (
     <>
       {items.map((item, index) => (
@@ -18,6 +23,7 @@ function TaskInnerList({ items, color }: TaskInnerListProps): ReactElement {
           {(provided, snapshot) => {
             return (
               <TaskItem
+                name={name}
                 item={item}
                 provided={provided}
                 snapshot={snapshot}

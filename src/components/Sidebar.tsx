@@ -89,6 +89,8 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
         duration: 3000
       })
     } finally {
+      setTitle('Create a new task')
+      setDescription('Click on the labels to edit its content.')
       queryClient.invalidateQueries('tasks')
       toggleModal()
     }

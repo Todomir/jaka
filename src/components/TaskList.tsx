@@ -31,7 +31,11 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
                 }`}
               >
                 {tasks && tasks.todo && (
-                  <TaskInnerList color="indigo" items={tasks.todo} />
+                  <TaskInnerList
+                    name={provided.droppableProps['data-rbd-droppable-id']}
+                    color="indigo"
+                    items={tasks.todo}
+                  />
                 )}
                 {provided.placeholder}
               </div>
@@ -58,7 +62,11 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
                 }`}
               >
                 {tasks && tasks.doing && (
-                  <TaskInnerList color="blue" items={tasks.doing} />
+                  <TaskInnerList
+                    name={provided.droppableProps['data-rbd-droppable-id']}
+                    color="blue"
+                    items={tasks.doing}
+                  />
                 )}
                 {provided.placeholder}
               </div>
@@ -85,7 +93,11 @@ export default function TaskList({ tasks }: TaskListProps): ReactElement {
                 }`}
               >
                 {tasks && tasks.done && (
-                  <TaskInnerList color="green" items={tasks.done} />
+                  <TaskInnerList
+                    name={provided.droppableProps['data-rbd-droppable-id']}
+                    color="green"
+                    items={tasks.done}
+                  />
                 )}
                 {provided.placeholder}
               </section>
