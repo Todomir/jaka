@@ -1,24 +1,20 @@
 import { useRouter } from 'next/router'
 
-import {
-  Dispatch,
-  FormEvent,
-  ReactElement,
-  useContext,
-  useRef,
-  useState
-} from 'react'
+import { FormEvent, ReactElement, useContext, useRef, useState } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 
 import useToast from '@hooks/useToast'
 import useToggle from '@hooks/useToggle'
 import useWindowSize from '@hooks/useWindowSize'
 
+import { TaskContext } from '@pages/dashboard'
+
 import { DarkModeContext } from '@store/DarkModeContext'
 
 import { CREATE_TASK } from '@utils/queries'
 
 import { GraphQLClient } from 'graphql-request'
+import produce from 'immer'
 import { destroyCookie } from 'nookies'
 
 import Button from './Button'
@@ -30,17 +26,14 @@ import Switch from './Switch'
 
 interface SidebarProps {
   user: { _id?: string; name: string; email: string }
-  dispatch: Dispatch<unknown>
   client: GraphQLClient
 }
 
-export default function Sidebar({
-  user,
-  client,
-  dispatch
-}: SidebarProps): ReactElement {
+export default function Sidebar({ user, client }: SidebarProps): ReactElement {
   const [logout, toggleLogout] = useToggle()
   const [showModal, toggleModal] = useToggle()
+
+  const { tasks, setTasks } = useContext(TaskContext)
 
   const { addToast } = useToast()
 
@@ -75,7 +68,10 @@ export default function Sidebar({
         title,
         description
       })
-      dispatch({ type: 'ADD', task })
+      const newTasks = produce(tasks, draft => {
+        draft.todo.push(task)
+      })
+      setTasks(newTasks)
       queryClient.invalidateQueries('tasks')
 
       addToast({
@@ -85,9 +81,10 @@ export default function Sidebar({
         duration: 3000
       })
     } catch (error) {
+      console.log(error)
       addToast({
         title: 'Uh oh!',
-        description: `There was an error (${error.response.status}): ${error.response.errors[0].message}`,
+        description: 'There was an error :(',
         status: 'danger',
         duration: 3000
       })

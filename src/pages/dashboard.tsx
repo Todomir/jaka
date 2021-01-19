@@ -1,6 +1,16 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 
-import { ReactElement, useCallback, useEffect, useReducer } from 'react'
+import {
+  createContext,
+  Dispatch,
+  ReactElement,
+  ReactNode,
+  ReactNodeArray,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState
+} from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import NoSSR from 'react-no-ssr'
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query'
@@ -29,29 +39,23 @@ export interface ITasks {
   done: [ITask]
 }
 
-// Tasks reducer
-const tasksReducer = produce((draft, action) => {
-  switch (action.type) {
-    case 'MOVE': {
-      draft[action.from] = draft[action.from] || []
-      draft[action.to] = draft[action.to] || []
-      const [removed] = draft[action.from].splice(action.fromIndex, 1)
-      draft[action.to].splice(action.toIndex, 0, removed)
-      break
-    }
-    case 'ADD': {
-      draft.todo.push(action.task)
-      break
-    }
-    case 'FETCH_SUCCESS': {
-      draft = action.payload
-      break
-    }
+interface ITaskContext {
+  tasks: ITasks
+  setTasks: Dispatch<SetStateAction<ITasks>>
+}
+interface ITaskProvider extends ITaskContext {
+  children: ReactNode | ReactNodeArray | ReactElement
+}
 
-    default:
-      return draft
-  }
-})
+export const TaskContext = createContext<ITaskContext>(null)
+
+const TaskProvider = ({ tasks, setTasks, children }: ITaskProvider) => {
+  return (
+    <TaskContext.Provider value={{ tasks, setTasks }}>
+      {children}
+    </TaskContext.Provider>
+  )
+}
 
 export default function Dashboard({
   token,
@@ -69,14 +73,15 @@ export default function Dashboard({
 
   const { data } = useQuery('tasks', async () => {
     const data = await client.request(GET_TASKS)
-    return data.tasks[0] || { todo: [], doing: [], done: [] }
+    const [tasks] = data.tasks
+    return tasks || { todo: [], doing: [], done: [] }
   })
 
   const { mutateAsync: updateTasks } = useMutation(async (tasks: ITasks) => {
     return await client.request(UPDATE_TASKS, { tasks })
   })
 
-  const [tasks, dispatch] = useReducer(tasksReducer, data)
+  const [tasks, setTasks] = useState<ITasks>(data)
 
   useEffect(() => {
     if (tasks) {
@@ -97,31 +102,36 @@ export default function Dashboard({
     }
   }, [tasks])
 
-  const onDragEnd = useCallback(result => {
-    if (result.reason === 'DROP') {
-      if (!result.destination) {
-        return
+  const onDragEnd = useCallback(
+    result => {
+      if (result.reason === 'DROP') {
+        const { source, destination } = result
+
+        const newTasks = produce(tasks, draft => {
+          draft[source.droppableId] = draft[source.droppableId] || []
+          draft[destination.droppableId] = draft[destination.droppableId] || []
+          const [removed] = draft[source.droppableId].splice(source.index, 1)
+          draft[destination.droppableId].splice(destination.index, 0, removed)
+        })
+
+        setTasks(newTasks)
       }
-      dispatch({
-        type: 'MOVE',
-        from: result.source.droppableId,
-        to: result.destination.droppableId,
-        fromIndex: result.source.index,
-        toIndex: result.destination.index
-      })
-    }
-  }, [])
+    },
+    [tasks]
+  )
 
   return (
     <main className="w-screen h-screen">
-      <NoSSR>
-        <section className="grid grid-cols-dashboard sm:gap-5 w-full h-full">
-          <Sidebar client={client} dispatch={dispatch} user={user} />
-          <DragDropContext onDragEnd={result => onDragEnd(result)}>
-            <TaskList tasks={tasks} />
-          </DragDropContext>
-        </section>
-      </NoSSR>
+      <TaskProvider tasks={tasks} setTasks={setTasks}>
+        <NoSSR>
+          <section className="grid grid-cols-dashboard sm:gap-5 w-full h-full">
+            <Sidebar client={client} user={user} />
+            <DragDropContext onDragEnd={result => onDragEnd(result)}>
+              <TaskList tasks={tasks} />
+            </DragDropContext>
+          </section>
+        </NoSSR>
+      </TaskProvider>
     </main>
   )
 }

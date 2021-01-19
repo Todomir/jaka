@@ -7,7 +7,6 @@ import { Hydrate } from 'react-query/hydration'
 
 import DarkModeProvider from '@store/DarkModeContext'
 import ToastProvider from '@store/ToastContext'
-
 export default function MyApp({
   Component,
   pageProps
