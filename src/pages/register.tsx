@@ -39,11 +39,11 @@ export default function Login(): ReactElement {
         duration: 3000
       })
 
-      router.push('/login')
+      router.push('/confirm-email')
     } catch (err) {
       addToast({
         title: 'Uh oh!',
-        description: `There was an error (${err.response.status}): ${err.response.errors[0].message}`,
+        description: `There was an error: ${err}`,
         status: 'danger',
         duration: 3000
       })

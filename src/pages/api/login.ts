@@ -10,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL)
+  const client = new GraphQLClient(`${process.env.NEXT_PUBLIC_API_URL}`)
   const { email, password } = await JSON.parse(req.body)
 
   if (!email || !password) {
@@ -21,23 +21,29 @@ export default async function handler(
     const { login } = await client.request(LOGIN, { email, password })
 
     if (login.user) {
-      const store = await ironStore({
-        password: process.env.NEXT_PUBLIC_STORE_PASSWORD
-      })
-      store.set('session', { user: login.user, token: login.token })
-      const seal = await store.seal()
-
-      res.setHeader(
-        'Set-Cookie',
-        cookie.serialize('seal', seal, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          maxAge: 7 * 24 * 60 * 60,
-          sameSite: 'strict',
-          path: '/'
+      if (login.user.emailConfirmed) {
+        const store = await ironStore({
+          password: process.env.NEXT_PUBLIC_STORE_PASSWORD
         })
-      )
-      res.redirect('/dashboard')
+        store.set('session', { user: login.user, token: login.token })
+        const seal = await store.seal()
+
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize('seal', seal, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 7 * 24 * 60 * 60,
+            sameSite: 'strict',
+            path: '/'
+          })
+        )
+        res.redirect('/dashboard')
+      } else {
+        res
+          .status(401)
+          .send({ error: 'You must confirm your email before logging in' })
+      }
     } else {
       res.status(404).send('Username and password combination does not exist.')
     }
