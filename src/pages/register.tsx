@@ -57,6 +57,7 @@ export default function Login(): ReactElement {
       <section className="h-full hidden md:block">
         <div className="relative w-full h-full">
           <Image
+            alt="Do more"
             src="/register-bg.jpg"
             quality={80}
             layout="fill"
@@ -72,7 +73,7 @@ export default function Login(): ReactElement {
             <span className="ml-3">Return to home page</span>
           </a>
         </Link>
-        <Image src="/logo.svg" width={40} height={40} />
+        <Image alt="JAKA Logo" src="/logo.svg" width={40} height={40} />
         <h1 className="mt-6 text-gray-900 text-4xl font-bold tracking-tighter mb-2 dark:text-gray-100">
           Sign up to <span className="font-cursive">JAKA</span>
         </h1>

@@ -1,9 +1,4 @@
-import {
-  DispatchWithoutAction,
-  ReactElement,
-  ReactNode,
-  ReactNodeArray
-} from 'react'
+import { ReactElement, ReactNode, ReactNodeArray } from 'react'
 
 import { AnimatePresence, motion } from 'framer-motion'
 interface ModalProps {

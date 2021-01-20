@@ -64,7 +64,7 @@ export default function Login(): ReactElement {
             <span className="ml-3">Return to home page</span>
           </a>
         </Link>
-        <Image src="/logo.svg" width={40} height={40} />
+        <Image alt="JAKA Logo" src="/logo.svg" width={40} height={40} />
         <h1 className="mt-6 text-gray-900 text-4xl font-bold tracking-tighter mb-2 dark:text-gray-100">
           Sign in to your account
         </h1>
@@ -111,6 +111,7 @@ export default function Login(): ReactElement {
         <div className="relative w-full h-full">
           <Image
             src="/login-bg.jpg"
+            alt="Get shit done"
             quality={80}
             layout="fill"
             objectFit="cover"

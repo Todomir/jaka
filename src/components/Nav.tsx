@@ -15,7 +15,13 @@ export default function Nav(): ReactElement {
     <nav>
       <section className="px-10 py-5 fixed w-full bg-white flex justify-between items-center dark:bg-gray-900 z-50">
         <div className="w-full sm:w-auto flex justify-between sm:justify-start items-center space-x-4">
-          <Image src="/logo.svg" layout="fixed" width={24} height={24} />
+          <Image
+            alt="JAKA Logo"
+            src="/logo.svg"
+            layout="fixed"
+            width={24}
+            height={24}
+          />
           <p className="h-6 hidden sm:block font-black font-cursive text-xl tracking-tighter dark:text-white">
             JAKA
           </p>
