@@ -16,12 +16,13 @@ import Input from '@components/Input'
 import { UPDATE_USER, VALIDATE_TOKEN } from '@utils/queries'
 
 import { GraphQLClient } from 'graphql-request'
-import { destroyCookie, parseCookies } from 'nookies'
+import ironStore from 'iron-store'
+import { parseCookies } from 'nookies'
 
 export default function Profile({
-  user,
-  token
+  session
 }: InferGetServerSidePropsType<typeof getServerSideProps>): ReactElement {
+  const { user, token } = session
   const { register, handleSubmit, errors } = useForm({ defaultValues: user })
   const [loading, toggleLoading] = useToggle()
   const { addToast } = useToast()
@@ -43,15 +44,25 @@ export default function Profile({
     mutation.mutate(
       { name, password, id: user._id },
       {
-        onSuccess: () => {
-          destroyCookie(null, 'token')
-          router.push('/login')
-          addToast({
-            title: 'Data updated successfully',
-            description: 'Your data was updated. Please sign back in.',
-            status: 'success',
-            duration: 3000
-          })
+        onSuccess: async () => {
+          const res = await fetch('/api/logout')
+
+          if (res.ok) {
+            addToast({
+              title: 'Data updated successfully',
+              description: 'Your data was updated. Please sign back in.',
+              status: 'success',
+              duration: 3000
+            })
+            router.push('/dashboard')
+          } else {
+            addToast({
+              title: 'Uh oh!',
+              description: `There was an error (${res.status}): ${res.statusText}`,
+              status: 'danger',
+              duration: 3000
+            })
+          }
           toggleLoading()
         },
         onError: error => {
@@ -123,36 +134,55 @@ export default function Profile({
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-  const { token } = parseCookies(ctx, 'token')
-  const headers = {
-    headers: {
-      authorization: `Bearer ${token}`
+  const { seal } = parseCookies(ctx)
+
+  const store = await ironStore({
+    password: process.env.NEXT_PUBLIC_STORE_PASSWORD,
+    sealed: seal
+  })
+
+  const session = store.get('session')
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
     }
   }
-  const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL, headers)
+
+  const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL, {
+    headers: {
+      authorization: `Bearer ${session.token}`
+    }
+  })
 
   try {
-    const data = await client.request(VALIDATE_TOKEN, { token })
+    const data = await client.request(VALIDATE_TOKEN, { token: session.token })
     const response = data.validateToken
 
-    if (ctx.res) {
-      if (!response.user) {
-        ctx.res.writeHead(302, { Location: '/login' })
-        ctx.res.end()
+    if (!response.user) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false
+        }
       }
-
-      return { props: { token, user: response.user } }
+    } else {
+      return {
+        props: {
+          session
+        }
+      }
     }
   } catch (error) {
-    console.log(error.message)
-
-    if (ctx.res) {
-      ctx.res.writeHead(302, { Location: '/login' })
-      ctx.res.end()
+    console.error(error)
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
     }
-  }
-
-  return {
-    props: { token, user: {} }
   }
 }

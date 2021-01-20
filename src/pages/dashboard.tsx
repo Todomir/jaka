@@ -29,6 +29,7 @@ import { GET_TASKS, UPDATE_TASKS, VALIDATE_TOKEN } from '@utils/queries'
 import { AnimatePresence, motion } from 'framer-motion'
 import { GraphQLClient } from 'graphql-request'
 import produce from 'immer'
+import ironStore from 'iron-store'
 import { parseCookies } from 'nookies'
 
 export interface ITask {
@@ -65,9 +66,9 @@ const TaskProvider = ({ tasks, setTasks, children, client }: ITaskProvider) => {
 }
 
 export default function Dashboard({
-  token,
-  user
+  session
 }: InferGetServerSidePropsType<typeof getServerSideProps>): ReactElement {
+  const { user, token } = session
   // GraphQL Client chunk
   const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL, {
     headers: {
@@ -212,35 +213,52 @@ export default function Dashboard({
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-  const { token } = parseCookies(ctx, 'token')
-  const queryClient = new QueryClient()
-  const headers = {
-    headers: {
-      authorization: `Bearer ${token}`
+  const { seal } = parseCookies(ctx)
+
+  const store = await ironStore({
+    password: process.env.NEXT_PUBLIC_STORE_PASSWORD,
+    sealed: seal
+  })
+
+  const session = store.get('session')
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
     }
   }
-  const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL, headers)
+
+  const queryClient = new QueryClient()
+  const client = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL, {
+    headers: {
+      authorization: `Bearer ${session.token}`
+    }
+  })
 
   try {
-    const data = await client.request(VALIDATE_TOKEN, { token })
+    const data = await client.request(VALIDATE_TOKEN, { token: session.token })
     const response = data.validateToken
 
-    if (ctx.res) {
-      if (!response.user) {
-        ctx.res.writeHead(302, { Location: '/login' })
-        ctx.res.end()
-      } else {
-        await queryClient.prefetchQuery('tasks', async () => {
-          const data = await client.request(GET_TASKS)
-          return data.tasks[0] || { todo: [], doing: [], done: [] }
-        })
+    if (!response.user) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false
+        }
+      }
+    } else {
+      await queryClient.prefetchQuery('tasks', async () => {
+        const data = await client.request(GET_TASKS)
+        return data.tasks[0] || { todo: [], doing: [], done: [] }
+      })
 
-        return {
-          props: {
-            token,
-            user: response.user,
-            dehydratedState: dehydrate(queryClient)
-          }
+      return {
+        props: {
+          session,
+          dehydratedState: dehydrate(queryClient)
         }
       }
     }
@@ -254,6 +272,9 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   }
 
   return {
-    props: { token, user: {}, dehydratedState: dehydrate(queryClient) }
+    props: {
+      session,
+      dehydratedState: dehydrate(queryClient)
+    }
   }
 }

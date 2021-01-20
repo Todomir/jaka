@@ -96,6 +96,35 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
     }
   }
 
+  const onLogout = async () => {
+    toggleLogout()
+    try {
+      const res = await fetch('/api/logout')
+      if (res.ok) {
+        addToast({
+          title: 'Logout successfully.',
+          description: 'Your logout was successfull. Come back any time! ',
+          status: 'success'
+        })
+        router.push('/login')
+      } else {
+        addToast({
+          title: 'Uh oh!',
+          description: `An error occurred while trying to logout (${res.status}): ${res.statusText}`,
+          status: 'danger',
+          duration: 3000
+        })
+      }
+    } catch (err) {
+      addToast({
+        title: 'Uh oh!',
+        description: `An error occurred with the request: ${err}`,
+        status: 'danger',
+        duration: 3000
+      })
+    }
+  }
+
   return (
     <>
       <Modal show={showModal}>
@@ -148,11 +177,7 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
               color="primary"
               label="Cancel"
               outlined
-              onClick={() => {
-                setTitle('Create a new task')
-                setDescription('Click on the labels to edit its content.')
-                toggleModal()
-              }}
+              onClick={onLogout}
               type="button"
             />
           </footer>
@@ -196,17 +221,7 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
           <Button
             loading={logout}
             loadingMessage={width < 1280 ? '' : 'Signing out'}
-            onClick={() => {
-              toggleLogout()
-              destroyCookie(null, 'token')
-              addToast({
-                title: 'Out already?',
-                description:
-                  'Your logout was successfull. Come back any time! ',
-                status: 'success'
-              })
-              router.push('/login')
-            }}
+            onClick={onLogout}
             className="w-full h-full flex rounded-lg"
             color="primary"
             outlined
@@ -226,18 +241,7 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
           <Button
             loading={logout}
             loadingMessage={width < 1280 ? '' : 'Signing out'}
-            onClick={() => {
-              toggleLogout()
-              destroyCookie(null, 'token')
-              addToast({
-                title: 'Out already?',
-                description:
-                  'Your logout was successfull. Come back any time! ',
-                status: 'success',
-                duration: 3000
-              })
-              router.push('/login')
-            }}
+            onClick={onLogout}
             className="w-full h-full hidden rounded-lg sm:flex"
             color="primary"
             outlined

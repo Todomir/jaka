@@ -5,50 +5,48 @@ import { useRouter } from 'next/router'
 import { ReactElement, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import useGQLClient from '@hooks/useGQLClient'
 import useToast from '@hooks/useToast'
 
 import Button from '@components/Button'
 import Icon from '@components/Icon'
 import Input from '@components/Input'
 
-import { LOGIN } from '@utils/queries'
-
-import { setCookie } from 'nookies'
-
 export default function Login(): ReactElement {
   const [loading, setLoading] = useState<boolean>(false)
   const { addToast } = useToast()
 
   const { register, handleSubmit, errors } = useForm()
-
-  const client = useGQLClient()
   const router = useRouter()
 
   const handleLogin = async ({ email, password }) => {
     setLoading(true)
     try {
-      const data = await client.request(LOGIN, { email, password })
-
-      setCookie(null, 'token', data.login.token, {
-        path: '/',
-        maxAge: 7 * 24 * 60 * 60, // Expires after 7d
-        sameSite: true,
-        secure: process.env.NODE_ENV === 'production'
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
       })
 
-      addToast({
-        title: 'Success!',
-        description: 'Your login was successful. Redirecting to dashboard page',
-        status: 'success',
-        duration: 3000
-      })
-
-      router.push('/dashboard')
+      if (res.ok) {
+        router.push('/dashboard')
+        addToast({
+          title: 'Success!',
+          description:
+            'Your login was successful. Redirecting to dashboard page',
+          status: 'success',
+          duration: 3000
+        })
+      } else {
+        addToast({
+          title: 'Uh oh!',
+          description: `There was an error (${res.status}): ${res.statusText}`,
+          status: 'danger',
+          duration: 3000
+        })
+      }
     } catch (err) {
       addToast({
         title: 'Uh oh!',
-        description: `There was an error (${err.response.status}): ${err.response.errors[0].message}`,
+        description: `There was an error: ${err}`,
         status: 'danger',
         duration: 3000
       })
