@@ -1,5 +1,13 @@
 module.exports = {
-  purge: [],
+  purge: {
+    content: [
+      './src/**/*.html',
+      './src/**/*.js',
+      './src/**/*.ts',
+      './src/**/*.jsx',
+      './src/**/*.tsx'
+    ]
+  },
   darkMode: 'class', // or 'media' or false
   theme: {
     minHeight: {
