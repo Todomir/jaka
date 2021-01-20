@@ -148,7 +148,7 @@ export default function Dashboard({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 2 }}
             transition={{ duration: 0.3 }}
-            className="fixed text-xs bottom-0 left-0 w-full flex justify-center items-center mb-16 sm:mb-10 z-50 "
+            className="fixed text-xs bottom-0 left-0 w-full flex justify-center items-center mb-16 sm:mb-10 z-50"
           >
             <div className="flex justify-center items-center py-2 px-4 bg-blue-500 text-white font-semibold tracking-tight rounded-md shadow-md w-2/3 sm:w-auto sm:text-sm">
               <Icon size={28} icon="info" />{' '}

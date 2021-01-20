@@ -16,7 +16,7 @@ import Input from '@components/Input'
 import { UPDATE_USER, VALIDATE_TOKEN } from '@utils/queries'
 
 import { GraphQLClient } from 'graphql-request'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies } from 'nookies'
 
 export default function Profile({
   user,
@@ -44,7 +44,14 @@ export default function Profile({
       { name, password, id: user._id },
       {
         onSuccess: () => {
-          router.push('/dashboard')
+          destroyCookie(null, 'token')
+          router.push('/login')
+          addToast({
+            title: 'Data updated successfully',
+            description: 'Your data was updated. Please sign back in.',
+            status: 'success',
+            duration: 3000
+          })
           toggleLoading()
         },
         onError: error => {
@@ -102,6 +109,9 @@ export default function Profile({
                 color="primary"
                 label="Return to dashboard"
                 type="button"
+                onClick={() => {
+                  router.push('/dashboard')
+                }}
                 outlined
               />
             </footer>
