@@ -14,6 +14,7 @@ interface EditableProps {
   text: string
   type: 'text' | 'textarea'
   className?: string
+  placeholder?: string
   childRef:
     | MutableRefObject<HTMLInputElement>
     | MutableRefObject<HTMLTextAreaElement>
@@ -24,6 +25,7 @@ export default function Editable({
   type,
   children,
   className,
+  placeholder,
   childRef,
   ...props
 }: EditableProps): ReactElement {
@@ -75,7 +77,9 @@ export default function Editable({
         </div>
       ) : (
         <div onClick={() => setEditing(true)}>
-          <span className={className}>{text || 'Editable content'}</span>
+          <span className={className}>
+            {text || placeholder || 'Editable content'}
+          </span>
         </div>
       )}
     </section>

@@ -36,10 +36,8 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
 
   const { addToast } = useToast()
 
-  const [title, setTitle] = useState<string>('Create a new task')
-  const [description, setDescription] = useState<string>(
-    'Click on the labels to edit its content.'
-  )
+  const [title, setTitle] = useState<string>('')
+  const [description, setDescription] = useState<string>('')
 
   const { darkMode, toggleDarkMode } = useContext(DarkModeContext)
   const { width } = useWindowSize()
@@ -129,6 +127,7 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
       <Modal show={showModal}>
         <form className="flex flex-col" onSubmit={onCreateTask}>
           <Editable
+            placeholder="Create a new task in JAKA"
             childRef={titleRef}
             className="font-bold text-2xl text-indigo-300 tracking-tighter"
             text={title}
@@ -145,6 +144,7 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
             />
           </Editable>
           <Editable
+            placeholder="Click on any label to edit it's contents"
             childRef={descriptionRef}
             className="text-base text-gray-400 tracking-tighter"
             text={description}
