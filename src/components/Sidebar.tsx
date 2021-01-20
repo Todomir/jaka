@@ -15,7 +15,6 @@ import { CREATE_TASK } from '@utils/queries'
 
 import { GraphQLClient } from 'graphql-request'
 import produce from 'immer'
-import { destroyCookie } from 'nookies'
 
 import Button from './Button'
 import Editable from './Editable'
