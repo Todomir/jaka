@@ -20,6 +20,11 @@ export default function MyApp({
         <title>JAKA | Just Another Kanban App</title>
         <meta charSet="utf-8" />
         <meta name="description" content="Just Another Kanban App" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Fugaz+One&family=Inter:wght@400;600;700&display=swap"
+          rel="stylesheet"
+        />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
