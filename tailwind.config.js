@@ -6,7 +6,13 @@ module.exports = {
       './src/**/*.ts',
       './src/**/*.jsx',
       './src/**/*.tsx'
-    ]
+    ],
+    options: {
+      safelist: ['text-indigo-300', 'text-blue-300', 'text-green-300'],
+      blocklist: [/^debug-/],
+      keyframes: true,
+      fontFace: true
+    }
   },
   darkMode: 'class', // or 'media' or false
   theme: {
