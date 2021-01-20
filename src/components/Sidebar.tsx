@@ -203,8 +203,7 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
                 title: 'Out already?',
                 description:
                   'Your logout was successfull. Come back any time! ',
-                status: 'success',
-                duration: 3000
+                status: 'success'
               })
               router.push('/login')
             }}

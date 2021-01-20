@@ -14,7 +14,7 @@ export default function ToastContainer({
   toasts
 }: ToastContainerProps): ReactElement {
   return (
-    <div className="absolute w-64 -ml-32 left-1/2 bottom-0 z-50 p-4">
+    <div className="fixed text-xs bottom-0 left-0 w-full flex justify-center items-center p-4 mb-16 sm:mb-10 z-50">
       <AnimatePresence>
         {toasts.map(item => (
           <Toast

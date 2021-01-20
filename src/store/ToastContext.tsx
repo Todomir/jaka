@@ -16,7 +16,7 @@ export interface IToast {
   title: string
   description: string
   status: 'success' | 'danger' | 'info' | 'warning'
-  duration: number
+  duration?: number
 }
 
 export type ToastArray = Array<IToast>
