@@ -37,7 +37,7 @@ export default async function handler(
           path: '/'
         })
       )
-      res.status(200).json(login.user)
+      res.redirect('/dashboard')
     } else {
       res.status(404).send('Username and password combination does not exist.')
     }
