@@ -18,6 +18,7 @@ export const LOGIN = gql`
         _id
         name
         email
+        emailConfirmed
       }
     }
   }

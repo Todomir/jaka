@@ -25,10 +25,8 @@ export default function Login(): ReactElement {
         method: 'POST',
         body: JSON.stringify({ email, password })
       })
-      const data = await res.json()
 
       if (res.ok) {
-        router.push('/dashboard')
         addToast({
           title: 'Success!',
           description:
@@ -36,11 +34,11 @@ export default function Login(): ReactElement {
           status: 'success',
           duration: 3000
         })
+        router.push('/dashboard')
       } else {
-        console.log(data)
         addToast({
           title: 'Uh oh!',
-          description: `There was an error (${res.status}): ${res.statusText} - ${data.error}`,
+          description: `There was an error (${res.status}): ${res.statusText}`,
           status: 'danger',
           duration: 3000
         })

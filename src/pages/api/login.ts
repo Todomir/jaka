@@ -19,7 +19,6 @@ export default async function handler(
 
   try {
     const { login } = await client.request(LOGIN, { email, password })
-
     if (login.user) {
       if (login.user.emailConfirmed) {
         const store = await ironStore({
@@ -38,7 +37,6 @@ export default async function handler(
             path: '/'
           })
         )
-        res.redirect('/dashboard')
       } else {
         res
           .status(401)
