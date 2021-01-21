@@ -46,7 +46,7 @@ export default function Toast({
       animate={{ opacity: 1, y: 0 }}
       exit={{ scale: 0.95, opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className={`relative py-4 px-6 w-80 rounded-lg shadow-lg tracking-tight ${renderStatusClasses()}`}
+      className={`relative py-4 px-6 w-full rounded-lg shadow-lg tracking-tight mb-2 ${renderStatusClasses()}`}
     >
       <header className="text-lg font-bold w-full">{title}</header>
       <main className="text-sm w-full break-words">{description}</main>
