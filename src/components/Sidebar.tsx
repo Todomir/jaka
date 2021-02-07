@@ -176,7 +176,7 @@ export default function Sidebar({ user, client }: SidebarProps): ReactElement {
               color="primary"
               label="Cancel"
               outlined
-              onClick={onLogout}
+              onClick={toggleModal}
               type="button"
             />
           </footer>
